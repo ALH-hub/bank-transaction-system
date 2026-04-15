@@ -2,6 +2,8 @@ import express, { Application } from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
+import ratelimite from 'express-rate-limit';
+
 import { config } from './config/env.js';
 import { errorHandler, notFound } from './middleware/error.js';
 import prisma from './config/database.js';
@@ -11,9 +13,18 @@ import { swaggerSpec, swaggerUi } from './config/swagger.js';
 import userRoutes from './routes/user.routes.js';
 
 const app: Application = express();
+const rateLimit = ratelimite({
+  windowMs: 1 * 60 * 1000,
+  max: 100,
+  standardHeaders: true,
+  legacyHeaders: false,
+});
 
 // Security middleware
 app.use(helmet());
+
+// Rate limiting middleware
+app.use(rateLimit);
 
 // CORS configuration
 app.use(
@@ -41,7 +52,6 @@ app.get('/', (req, res) => {
     message: 'Banking System API is running',
     version: '1.0.0',
     endpoints: {
-      users: '/api/users',
       health: '/api/health',
       docs: '/api/docs',
     },
@@ -57,7 +67,6 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// DOCUMENTATION ROUTES
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Alternative: Serve swagger.json endpoint
@@ -78,26 +87,25 @@ const startServer = async () => {
   try {
     // Test database connection
     await prisma.$connect();
-    console.log('✓ Database connected successfully');
+    console.log('Database connected successfully');
 
     // Start server
     const server = app.listen(config.port, () => {
-      console.log(`\n✓ Server running on http://localhost:${config.port}`);
-      console.log(`✓ Environment: ${config.env}`);
-      console.log(`✓ Health check: http://localhost:${config.port}/api/health`);
-      console.log(`✓ API Docs: http://localhost:${config.port}/api/docs`);
+      console.log(`\nServer running on http://localhost:${config.port}`);
+      console.log(`Environment: ${config.env}`);
+      console.log(`Health check: http://localhost:${config.port}/api/health`);
+      console.log(`API Docs: http://localhost:${config.port}/api/docs`);
       console.log(
-        `✓ Swagger JSON: http://localhost:${config.port}/api/swagger.json`,
+        `Swagger JSON: http://localhost:${config.port}/api/swagger.json`,
       );
-      console.log(`✓ Users API: http://localhost:${config.port}/api/users\n`);
     });
 
     // Graceful shutdown
     const gracefulShutdown = async () => {
-      console.log('\n⏱ Shutting down gracefully...');
+      console.log('\nShutting down gracefully...');
       server.close(async () => {
         await prisma.$disconnect();
-        console.log('✓ Server and database disconnected');
+        console.log('Server and database disconnected');
         process.exit(0);
       });
     };
