@@ -1,6 +1,6 @@
-import prisma from '../config/database.js';
-import { generateAccountNumber } from '../utils/helpers.js';
-import { CreateUserInput } from '../zod-schema/user.schema.js';
+import prisma from '../config/database.ts';
+import { generateAccountNumber } from '../utils/helpers.ts';
+import { CreateUserInput } from '../zod-schema/user.schema.ts';
 
 export const userService = {
   async getAllUsers() {

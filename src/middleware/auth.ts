@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from './error.js';
+import { AppError } from './error.ts';
 
 export interface AuthRequest extends Request {
   userId?: string;
@@ -14,9 +14,7 @@ export const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
       throw new AppError('No authorization token provided', 401);
     }
 
-    // TODO: Implement token verification logic
-    // const decoded = verifyToken(token);
-    // req.userId = decoded.id;
+    // To Complete
 
     next();
   } catch (error) {

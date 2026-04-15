@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
-import { userService } from '../services/user.service.js';
-import { AppError } from '../middleware/error.js';
+import { userService } from '../services/user.service.ts';
+import { AppError } from '../middleware/error.ts';
 
 export const userController = {
   async getAllUsers(req: Request, res: Response, next: NextFunction) {
