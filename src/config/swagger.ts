@@ -1,6 +1,6 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUiExpress from 'swagger-ui-express';
-import { config } from './env.ts';
+import { config } from './env.js';
 
 const swaggerOptions = {
   definition: {

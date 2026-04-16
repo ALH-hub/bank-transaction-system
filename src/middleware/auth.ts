@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { AppError } from './error.ts';
+import { AppError } from './error.js';
 
 export interface AuthRequest extends Request {
   userId?: string;

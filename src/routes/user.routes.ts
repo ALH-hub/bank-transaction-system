@@ -1,7 +1,7 @@
 import { Router, type Router as ExpressRouter } from 'express';
-import { userController } from '../controllers/user.controller.ts';
-import { validate } from '../middleware/validate.ts';
-import { createUserSchema } from '../zod-schema/index.ts';
+import { userController } from '../controllers/user.controller.js';
+import { validate } from '../middleware/validate.js';
+import { createUserSchema } from '../zod-schema/index.js';
 
 const router: ExpressRouter = Router();
 
