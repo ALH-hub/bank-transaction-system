@@ -5,26 +5,26 @@ import { config } from './env.js';
 const swaggerOptions = {
   definition: {
     openapi: '3.0.0',
-    //     info: {
-    //       title: 'Banking System API',
-    //       version: '1.0.0',
-    //       description: `A comprehensive banking system API for managing user accounts and transactions.
+    info: {
+      title: 'Banking System API',
+      version: '1.0.0',
+      description: `A comprehensive banking system API for managing user accounts and transactions.
 
-    // ## Features
-    // - User account management (create, read, update, delete)
-    // - Account balance tracking
-    // - User profile management
+    ## Features
+    - User account management (create, read, update, delete)
+    - Account balance tracking
+    - User profile management
 
-    // ## Authentication
-    // Currently supports basic operations. JWT authentication can be implemented using the auth middleware.`,
-    //       contact: {
-    //         name: 'Banking System Support',
-    //         email: 'support@banking.com',
-    //       },
-    //       license: {
-    //         name: 'ISC',
-    //       },
-    //     },
+    ## Authentication
+    Currently supports basic operations. JWT authentication can be implemented using the auth middleware.`,
+      contact: {
+        name: 'Banking System Support',
+        email: 'support@banking.com',
+      },
+      license: {
+        name: 'ISC',
+      },
+    },
     servers: [
       {
         url: config.appUrl,

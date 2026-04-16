@@ -26,16 +26,16 @@ model User {
   @@map("users")
 }
 
-// Transaction model for future use
-model Transaction {
-  id            String   @id @default(cuid())
-  userId        String
-  type          String // "deposit" or "withdrawal"
-  amount        Float
-  description   String?
-  balanceBefore Float
-  balanceAfter  Float
-  createdAt     DateTime @default(now())
+// // Transaction model for future use
+// model Transaction {
+//   id            String   @id @default(cuid())
+//   userId        String
+//   type          String // "deposit" or "withdrawal"
+//   amount        Float
+//   description   String?
+//   balanceBefore Float
+//   balanceAfter  Float
+//   createdAt     DateTime @default(now())
 
-  @@map("transactions")
-}
+//   @@map("transactions")
+// }
