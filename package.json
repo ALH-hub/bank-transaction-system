@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "tsx watch src/main.ts",
     "start": "node dist/src/main.js",
-    "build": "rimraf dist && tsc",
+    "build": "if [ -d \"dist\" ]; then rm -rf dist; fi && tsc",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
     "prisma:migrate:prod": "prisma migrate deploy",
