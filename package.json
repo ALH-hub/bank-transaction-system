@@ -8,6 +8,7 @@
     "build": "rimraf dist && tsc",
     "prisma:generate": "prisma generate",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:migrate:prod": "prisma migrate deploy",
     "prisma:studio": "prisma studio",
     "lint": "eslint src --ext .ts"
   },

@@ -24,7 +24,7 @@ const rateLimit = ratelimite({
 app.use(helmet());
 
 // Rate limiting middleware
-app.use(rateLimit);
+// app.use(rateLimit);
 
 // CORS configuration
 app.use(
