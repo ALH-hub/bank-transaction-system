@@ -10,12 +10,12 @@ const swaggerOptions = {
       version: '1.0.0',
       description: `A comprehensive banking system API for managing user accounts and transactions.
 
-    ## Features
+    # Features
     - User account management (create, read, update, delete)
     - Account balance tracking
     - User profile management
 
-    ## Authentication
+    # Authentication
     Currently supports basic operations. JWT authentication can be implemented using the auth middleware.`,
       contact: {
         name: 'Banking System Support',
@@ -33,6 +33,14 @@ const swaggerOptions = {
       {
         url: `${config.appUrl}/api`,
         description: 'API base URL',
+      },
+      {
+        url: 'https://bank-transaction-system-9lgc.onrender.com',
+        description: 'Production server',
+      },
+      {
+        url: 'https://bank-transaction-system-9lgc.onrender.com/api',
+        description: 'Production server',
       },
     ],
     tags: [
