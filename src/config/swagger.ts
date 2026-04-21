@@ -44,33 +44,24 @@ A comprehensive, production-ready banking system API with full CRUD operations f
 - **Transaction Status**: PENDING, COMPLETED, FAILED, REVERSED states
 - **Balance Tracking**: Before/after balance for each transaction
 
-## User Roles & Permissions
+## User Roles & Permissions Matrix
 
-### ADMIN Role
-- Full system access
-- Create, read, update, delete users
-- Manage user roles
-- Activate/deactivate accounts
-- View all transactions
-- View all accounts
+| Permission | ADMIN | CUSTOMER | TELLER |
+|---|:---:|:---:|:---:|
+| View all users | ✓ | ✗ | ✓ |
+| Manage users (CRUD) | ✓ | ✗ | ✗ |
+| Change user roles | ✓ | ✗ | ✗ |
+| View own profile | ✓ | ✓ | ✓ |
+| Create accounts | ✓ | ✓ | ✗ |
+| View all accounts | ✓ | ✗ | ✓ |
+| Manage own accounts | ✓ | ✓ | ✗ |
+| View own transactions | ✓ | ✓ | ✓ |
+| View all transactions | ✓ | ✗ | ✓ |
+| Deposit (any account) | ✓ | ✓* | ✗ |
+| Withdraw | ✓ | ✓* | ✗ |
+| Transfer | ✓ | ✓* | ✗ |
 
-### CUSTOMER Role
-- View own profile
-- Create and manage own accounts
-- Deposit to own accounts
-- Withdraw from own accounts
-- Transfer from own accounts
-- View own transaction history
-- Cannot view other users' data
-- Cannot view all transactions
-
-### TELLER Role
-- View all users and accounts
-- View all transactions
-- Help customers with operations
-- View transaction details
-- Cannot delete users
-- Cannot create new users
+*Customer operations only on own accounts
 
 ## Authentication
 
