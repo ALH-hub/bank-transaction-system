@@ -11,6 +11,9 @@ import { swaggerSpec, swaggerUi } from './config/swagger.js';
 
 // Import routes
 import userRoutes from './routes/user.routes.js';
+import authRoutes from './routes/auth.routes.js';
+import accountRoutes from './routes/account.routes.js';
+import transactionRoutes from './routes/transaction.routes.js';
 
 const app: Application = express();
 const rateLimit = ratelimite({
@@ -76,7 +79,10 @@ app.get('/api/swagger.json', (req, res) => {
 });
 
 // API ROUTES
+app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/accounts', accountRoutes);
+app.use('/api/transactions', transactionRoutes);
 
 // ERROR HANDLING
 app.use(notFound);
