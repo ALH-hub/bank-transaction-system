@@ -119,7 +119,7 @@ Authorization: Bearer <access_token>
         variables: {
           protocol: {
             enum: ['http', 'https'],
-            default: 'http',
+            default: config.appUrl.startsWith('https') ? 'https' : 'http',
           },
         },
       },
