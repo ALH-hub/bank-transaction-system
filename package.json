@@ -6,6 +6,7 @@
     "dev": "tsx watch src/main.ts",
     "start": "node dist/src/main.js",
     "build": "rimraf dist && tsc",
+    "clean": "rimraf dist",
     "generate": "prisma generate",
     "migrate": "prisma migrate dev",
     "migrate:prod": "prisma migrate deploy",
