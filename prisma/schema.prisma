@@ -9,33 +9,120 @@ datasource db {
   provider = "postgresql"
 }
 
+// Define roles enum
+enum Role {
+  ADMIN
+  CUSTOMER
+  TELLER
+}
+
+// Define transaction types
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER
+}
+
+// Define transaction status
+enum TransactionStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REVERSED
+}
+
 // User model for banking system
 model User {
-  id            String   @id @default(cuid())
-  firstName     String
-  lastName      String
-  email         String   @unique
-  phone         String   @unique
-  accountNumber String   @unique
-  accountType   String   @default("savings")
-  balance       Float    @default(0.0)
-  isActive      Boolean  @default(true)
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id        String   @id @default(cuid())
+  firstName String
+  lastName  String
+  email     String   @unique
+  phone     String   @unique
+  password  String
+  role      Role     @default(CUSTOMER)
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  accounts             Account[]
+  tokens               Token[]
+  transactionsSent     Transaction[] @relation("FromUser")
+  transactionsReceived Transaction[] @relation("ToUser")
 
   @@map("users")
 }
 
-// // Transaction model for future use
-// model Transaction {
-//   id            String   @id @default(cuid())
-//   userId        String
-//   type          String // "deposit" or "withdrawal"
-//   amount        Float
-//   description   String?
-//   balanceBefore Float
-//   balanceAfter  Float
-//   createdAt     DateTime @default(now())
+// Account model - one user can have multiple accounts
+model Account {
+  id            String   @id @default(cuid())
+  userId        String
+  accountNumber String   @unique
+  accountType   String   @default("savings") // savings, checking, investment
+  balance       Float    @default(0.0)
+  currency      String   @default("USD")
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-//   @@map("transactions")
-// }
+  // Relations
+  user             User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  transactionsFrom Transaction[] @relation("FromAccount")
+  transactionsTo   Transaction[] @relation("ToAccount")
+  transactions     Transaction[]
+
+  @@index([userId])
+  @@map("accounts")
+}
+
+// Transaction model for tracking all transactions
+model Transaction {
+  id            String            @id @default(cuid())
+  fromAccountId String?
+  toAccountId   String?
+  fromUserId    String?
+  toUserId      String?
+  type          TransactionType
+  amount        Float
+  description   String?
+  status        TransactionStatus @default(PENDING)
+  balanceBefore Float
+  balanceAfter  Float
+  reference     String            @unique @default(cuid())
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  // Relations
+  fromUser    User?    @relation("FromUser", fields: [fromUserId], references: [id], onDelete: SetNull)
+  toUser      User?    @relation("ToUser", fields: [toUserId], references: [id], onDelete: SetNull)
+  fromAccount Account? @relation("FromAccount", fields: [fromAccountId], references: [id], onDelete: SetNull)
+  toAccount   Account? @relation("ToAccount", fields: [toAccountId], references: [id], onDelete: SetNull)
+  account     Account? @relation(fields: [accountId], references: [id])
+  accountId   String?
+
+  @@index([fromAccountId])
+  @@index([toAccountId])
+  @@index([fromUserId])
+  @@index([toUserId])
+  @@map("transactions")
+}
+
+// Token model for JWT token management and blacklisting
+model Token {
+  id            String   @id @default(cuid())
+  userId        String
+  token         String   @unique
+  tokenType     String   @default("ACCESS") // ACCESS, REFRESH
+  isValid       Boolean  @default(true)
+  isBlacklisted Boolean  @default(false)
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([token])
+  @@map("tokens")
+}
