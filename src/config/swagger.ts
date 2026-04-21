@@ -113,7 +113,9 @@ Authorization: Bearer <access_token>
     servers: [
       {
         url: config.appUrl,
-        description: 'Development server',
+        description: config.appUrl.includes('localhost')
+          ? 'Local development server'
+          : 'Production server',
         variables: {
           protocol: {
             enum: ['http', 'https'],
@@ -123,11 +125,9 @@ Authorization: Bearer <access_token>
       },
       {
         url: `${config.appUrl}/api`,
-        description: 'Development API base',
-      },
-      {
-        url: 'https://bank-transaction-system-9lgc.onrender.com/api',
-        description: 'Production API base',
+        description: config.appUrl.includes('localhost')
+          ? 'Local API base'
+          : 'Production API base',
       },
     ],
     tags: [
