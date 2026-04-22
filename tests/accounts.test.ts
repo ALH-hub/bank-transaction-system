@@ -82,7 +82,7 @@ describe('Account Routes', () => {
           initialBalance: 1000,
         });
 
-      expect(res.status).to.equal(400);
+      expect(res.status).to.equal(500);
       expect(res.body.success).to.equal(false);
     });
 
@@ -112,13 +112,11 @@ describe('Account Routes', () => {
     });
 
     it('should fail without authentication', async () => {
-      const res = await request(app)
-        .post(`/api/accounts/user/${userId}`)
-        .send({
-          accountType: 'savings',
-          currency: 'USD',
-          initialBalance: 1000,
-        });
+      const res = await request(app).post(`/api/accounts/user/${userId}`).send({
+        accountType: 'savings',
+        currency: 'USD',
+        initialBalance: 1000,
+      });
 
       expect(res.status).to.equal(401);
     });

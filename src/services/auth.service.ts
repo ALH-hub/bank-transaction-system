@@ -53,6 +53,11 @@ export const authService = {
       role: user.role,
     });
 
+    // Delete any old tokens for this user (shouldn't exist for new users, but just in case)
+    await prisma.token.deleteMany({
+      where: { userId: user.id },
+    });
+
     // Store tokens in database
     const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000); // 7 days for refresh token
     await prisma.token.create({
@@ -97,6 +102,11 @@ export const authService = {
       userId: user.id,
       email: user.email,
       role: user.role,
+    });
+
+    // Delete old tokens for this user to avoid unique constraint violations
+    await prisma.token.deleteMany({
+      where: { userId: user.id },
     });
 
     // Store refresh token in database
