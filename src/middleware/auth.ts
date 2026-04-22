@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { verifyToken, JWTPayload } from '../utils/jwt.js';
 import { AppError } from './error.js';
-import prisma from '../config/database.js';
 
 export interface AuthRequest extends Request {
   userId?: string;
@@ -27,19 +26,10 @@ export const authenticate = async (
     const token = authHeader.slice(7); // Remove 'Bearer ' prefix
     req.token = token;
 
-    // Verify token
+    // Verify token signature and expiration
     const decoded = verifyToken(token);
     if (!decoded) {
       throw new AppError('Invalid or expired token', 401);
-    }
-
-    // Check if token is blacklisted
-    const blacklistedToken = await prisma.token.findUnique({
-      where: { token },
-    });
-
-    if (blacklistedToken && (blacklistedToken.isBlacklisted || !blacklistedToken.isValid)) {
-      throw new AppError('Token has been revoked', 401);
     }
 
     req.userId = decoded.userId;

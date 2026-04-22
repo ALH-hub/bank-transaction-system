@@ -14,7 +14,9 @@
     "lint": "eslint src --ext .ts",
     "test": "nyc mocha --require tsx/cjs --exit 'tests/*.test.ts'",
     "test:watch": "mocha --require tsx/cjs --watch 'tests/**/*.test.ts'",
-    "test:coverage": "rimraf .nyc_output coverage && nyc --reporter=html --reporter=text mocha --require tsx/cjs --exit 'tests/**/*.test.ts'"
+    "test:coverage": "rimraf .nyc_output coverage && nyc --reporter=html --reporter=text mocha --require tsx/cjs --exit 'tests/**/*.test.ts'",
+    "test:report": "nyc report --reporter=html --reporter=text",
+    "test:open:coverage": "nyc report --reporter=html && open coverage/index.html"
   },
   "keywords": [],
   "author": "",
