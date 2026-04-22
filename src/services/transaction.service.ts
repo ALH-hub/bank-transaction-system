@@ -1,4 +1,5 @@
 import prisma from '../config/database.js';
+import { AppError } from '../middleware/error.js';
 import {
   DepositInput,
   WithdrawInput,
@@ -175,16 +176,16 @@ export const transactionService = {
 
     // Verify account belongs to user
     if (account.userId !== userId) {
-      throw new Error('You can only withdraw from your own account');
+      throw new AppError('You can only withdraw from your own account', 403);
     }
 
     if (!account.isActive) {
-      throw new Error('Account is not active');
+      throw new AppError('Account is not active', 400);
     }
 
     // Check sufficient balance
     if (account.balance < data.amount) {
-      throw new Error('Insufficient balance');
+      throw new AppError('Insufficient balance', 400);
     }
 
     // Create transaction
@@ -234,30 +235,30 @@ export const transactionService = {
     });
 
     if (!fromAccount) {
-      throw new Error('From account not found');
+      throw new AppError('From account not found', 404);
     }
 
     if (!toAccount) {
-      throw new Error('To account not found');
+      throw new AppError('To account not found', 404);
     }
 
     // Verify from account belongs to user
     if (fromAccount.userId !== userId) {
-      throw new Error('You can only transfer from your own account');
+      throw new AppError('You can only transfer from your own account', 403);
     }
 
     if (!fromAccount.isActive || !toAccount.isActive) {
-      throw new Error('One or both accounts are not active');
+      throw new AppError('One or both accounts are not active', 400);
     }
 
     // Check sufficient balance
     if (fromAccount.balance < data.amount) {
-      throw new Error('Insufficient balance');
+      throw new AppError('Insufficient balance', 400);
     }
 
     // Prevent transfer to same account
     if (data.fromAccountId === data.toAccountId) {
-      throw new Error('Cannot transfer to the same account');
+      throw new AppError('Cannot transfer to the same account', 400);
     }
 
     // Create transaction
@@ -312,13 +313,17 @@ export const transactionService = {
       include: {
         fromAccount: true,
         toAccount: true,
-        fromUser: { select: { id: true, firstName: true, lastName: true, email: true } },
-        toUser: { select: { id: true, firstName: true, lastName: true, email: true } },
+        fromUser: {
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
+        toUser: {
+          select: { id: true, firstName: true, lastName: true, email: true },
+        },
       },
     });
 
     if (!transaction) {
-      throw new Error('Transaction not found');
+      throw new AppError('Transaction not found', 404);
     }
 
     return transaction;

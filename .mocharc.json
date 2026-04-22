@@ -4,5 +4,5 @@
   "spec": "tests/**/*.test.ts",
   "timeout": 10000,
   "exit": true,
-  "recursive": true
+  "recursive": false
 }

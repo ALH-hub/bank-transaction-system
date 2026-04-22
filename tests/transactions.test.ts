@@ -30,9 +30,7 @@ describe('Transaction Routes', () => {
 
   beforeEach(async () => {
     // Register sender
-    let res = await request(app)
-      .post('/api/auth/register')
-      .send(userData);
+    let res = await request(app).post('/api/auth/register').send(userData);
 
     accessToken = res.body.data.accessToken;
     userId = res.body.data.user.id;
@@ -50,9 +48,7 @@ describe('Transaction Routes', () => {
     accountId = res.body.data.id;
 
     // Register receiver
-    res = await request(app)
-      .post('/api/auth/register')
-      .send(receiverData);
+    res = await request(app).post('/api/auth/register').send(receiverData);
 
     receiverUserId = res.body.data.user.id;
     const receiverToken = res.body.data.accessToken;
@@ -130,7 +126,7 @@ describe('Transaction Routes', () => {
         .post('/api/transactions/deposit')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          accountId: 'invalid-id',
+          accountId: 'cmo8gzd720303fqf20sgldaz2',
           amount: 100,
         });
 
@@ -154,7 +150,7 @@ describe('Transaction Routes', () => {
           amount: 100,
         });
 
-      expect(res.status).to.equal(400);
+      expect(res.status).to.equal(404);
     });
   });
 
@@ -229,7 +225,7 @@ describe('Transaction Routes', () => {
         .post('/api/transactions/withdraw')
         .set('Authorization', `Bearer ${accessToken}`)
         .send({
-          accountId: 'invalid-id',
+          accountId: 'cmo8gzd720303fqf20sgldaz2',
           amount: 100,
         });
 
@@ -238,12 +234,10 @@ describe('Transaction Routes', () => {
 
     it('should only allow account owner to withdraw', async () => {
       const receiverToken = (
-        await request(app)
-          .post('/api/auth/login')
-          .send({
-            email: receiverData.email,
-            password: receiverData.password,
-          })
+        await request(app).post('/api/auth/login').send({
+          email: receiverData.email,
+          password: receiverData.password,
+        })
       ).body.data.accessToken;
 
       const res = await request(app)
@@ -254,7 +248,7 @@ describe('Transaction Routes', () => {
           amount: 100,
         });
 
-      expect(res.status).to.equal(400);
+      expect(res.status).to.equal(403);
     });
   });
 
@@ -308,12 +302,10 @@ describe('Transaction Routes', () => {
         .set('Authorization', `Bearer ${accessToken}`);
 
       const receiverToken = (
-        await request(app)
-          .post('/api/auth/login')
-          .send({
-            email: receiverData.email,
-            password: receiverData.password,
-          })
+        await request(app).post('/api/auth/login').send({
+          email: receiverData.email,
+          password: receiverData.password,
+        })
       ).body.data.accessToken;
 
       const receiverInitialRes = await request(app)
@@ -351,12 +343,10 @@ describe('Transaction Routes', () => {
 
     it('should fail if from account is not owned by user', async () => {
       const receiverToken = (
-        await request(app)
-          .post('/api/auth/login')
-          .send({
-            email: receiverData.email,
-            password: receiverData.password,
-          })
+        await request(app).post('/api/auth/login').send({
+          email: receiverData.email,
+          password: receiverData.password,
+        })
       ).body.data.accessToken;
 
       const res = await request(app)
@@ -368,7 +358,7 @@ describe('Transaction Routes', () => {
           amount: 100,
         });
 
-      expect(res.status).to.equal(400);
+      expect(res.status).to.equal(403);
     });
   });
 
