@@ -25,7 +25,7 @@ export const refreshTokenSchema = z.object({
 export const createAccountSchema = z.object({
   accountType: z.enum(['savings', 'checking', 'investment']).default('savings'),
   currency: z.string().length(3, 'Currency code must be 3 characters').default('USD'),
-  initialBalance: z.number().min(0, 'Initial balance cannot be negative').default(0),
+  initialBalance: z.number().min(1000, 'Initial balance must be at least 1000').default(1000),
 });
 
 export const updateAccountSchema = z.object({
@@ -38,13 +38,13 @@ export const updateAccountSchema = z.object({
 
 export const depositSchema = z.object({
   accountId: z.string().cuid('Invalid account ID'),
-  amount: z.number().min(0.01, 'Amount must be greater than 0'),
+  amount: z.number().min(100, 'Deposit amount must be at least 100'),
   description: z.string().max(500).optional(),
 });
 
 export const withdrawSchema = z.object({
   accountId: z.string().cuid('Invalid account ID'),
-  amount: z.number().min(0.01, 'Amount must be greater than 0'),
+  amount: z.number().min(100, 'Withdrawal amount must be at least 100'),
   description: z.string().max(500).optional(),
 });
 

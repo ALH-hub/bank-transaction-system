@@ -109,6 +109,18 @@ export const accountService = {
       throw new Error('User not found');
     }
 
+    // Check if user already has an account of this type
+    const existingAccountOfType = await prisma.account.findFirst({
+      where: {
+        userId,
+        accountType: data.accountType,
+      },
+    });
+
+    if (existingAccountOfType) {
+      throw new Error(`User already has a ${data.accountType} account`);
+    }
+
     // Generate unique account number
     let accountNumber = generateAccountNumber();
     let isUnique = false;
@@ -124,14 +136,14 @@ export const accountService = {
       }
     }
 
-    // Create account
+    // Create account with initial balance
     const account = await prisma.account.create({
       data: {
         userId,
         accountNumber,
-        accountType: data.accountType || 'savings',
-        currency: data.currency || 'USD',
-        balance: data.initialBalance || 0,
+        accountType: data.accountType,
+        currency: data.currency,
+        balance: data.initialBalance,
         isActive: true,
       },
       select: {
