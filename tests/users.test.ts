@@ -200,10 +200,10 @@ describe('User Routes', () => {
     });
   });
 
-  describe('POST /api/users/{userId}/activate', () => {
+  describe('PUT /api/users/{userId}/activate', () => {
     it('should only allow admin to activate users', async () => {
       const res = await request(app)
-        .post(`/api/users/${customerId}/activate`)
+        .put(`/api/users/${customerId}/activate`)
         .set('Authorization', `Bearer ${customerToken}`);
 
       expect(res.status).to.equal(403);
@@ -212,12 +212,12 @@ describe('User Routes', () => {
     it('should allow admin to activate users', async () => {
       // First deactivate
       await request(app)
-        .post(`/api/users/${customerId}/deactivate`)
+        .put(`/api/users/${customerId}/deactivate`)
         .set('Authorization', `Bearer ${adminToken}`);
 
       // Then activate
       const res = await request(app)
-        .post(`/api/users/${customerId}/activate`)
+        .put(`/api/users/${customerId}/activate`)
         .set('Authorization', `Bearer ${adminToken}`);
 
       expect(res.status).to.equal(200);
@@ -226,10 +226,10 @@ describe('User Routes', () => {
     });
   });
 
-  describe('POST /api/users/{userId}/deactivate', () => {
+  describe('PUT /api/users/{userId}/deactivate', () => {
     it('should only allow admin to deactivate users', async () => {
       const res = await request(app)
-        .post(`/api/users/${customerId}/deactivate`)
+        .put(`/api/users/${customerId}/deactivate`)
         .set('Authorization', `Bearer ${customerToken}`);
 
       expect(res.status).to.equal(403);
@@ -237,7 +237,7 @@ describe('User Routes', () => {
 
     it('should allow admin to deactivate users', async () => {
       const res = await request(app)
-        .post(`/api/users/${customerId}/deactivate`)
+        .put(`/api/users/${customerId}/deactivate`)
         .set('Authorization', `Bearer ${adminToken}`);
 
       expect(res.status).to.equal(200);
