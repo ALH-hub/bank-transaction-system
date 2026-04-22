@@ -121,7 +121,7 @@ router.get(
  * /api/transactions/deposit:
  *   post:
  *     summary: Deposit money to account
- *     description: Make a deposit to a bank account
+ *     description: Make a deposit to a bank account. Minimum deposit amount is 100.
  *     tags:
  *       - Transactions
  *     security:
@@ -140,7 +140,9 @@ router.get(
  *                 type: string
  *               amount:
  *                 type: number
+ *                 minimum: 100
  *                 example: 500.00
+ *                 description: Minimum deposit amount is 100
  *               description:
  *                 type: string
  *                 example: Monthly salary deposit
@@ -148,7 +150,7 @@ router.get(
  *       201:
  *         description: Deposit successful
  *       400:
- *         description: Invalid amount or account
+ *         description: Invalid amount (< 100) or account not found
  *       401:
  *         description: Unauthorized
  *       403:
@@ -168,7 +170,7 @@ router.post(
  * /api/transactions/withdraw:
  *   post:
  *     summary: Withdraw money from account
- *     description: Make a withdrawal from a bank account
+ *     description: Make a withdrawal from a bank account. Minimum withdrawal amount is 100.
  *     tags:
  *       - Transactions
  *     security:
@@ -187,7 +189,9 @@ router.post(
  *                 type: string
  *               amount:
  *                 type: number
+ *                 minimum: 100
  *                 example: 200.00
+ *                 description: Minimum withdrawal amount is 100
  *               description:
  *                 type: string
  *                 example: ATM withdrawal
@@ -195,7 +199,7 @@ router.post(
  *       201:
  *         description: Withdrawal successful
  *       400:
- *         description: Invalid amount, insufficient balance, or account inactive
+ *         description: Invalid amount (< 100), insufficient balance, or account inactive
  *       401:
  *         description: Unauthorized
  *       403:

@@ -114,7 +114,7 @@ router.get('/:accountId', authenticate, accountController.getAccountById);
  * /api/accounts/user/{userId}:
  *   post:
  *     summary: Create new account
- *     description: Create a new bank account for a user
+ *     description: Create a new bank account for a user. Minimum initial balance is 1000. User cannot have multiple accounts of the same type.
  *     tags:
  *       - Accounts
  *     security:
@@ -136,15 +136,20 @@ router.get('/:accountId', authenticate, accountController.getAccountById);
  *                 type: string
  *                 enum: [savings, checking, investment]
  *                 default: savings
+ *                 description: Account type - user cannot have multiple accounts of same type
  *               currency:
  *                 type: string
  *                 example: USD
  *               initialBalance:
  *                 type: number
+ *                 minimum: 1000
  *                 example: 1000
+ *                 description: Minimum initial balance is 1000
  *     responses:
  *       201:
  *         description: Account created successfully
+ *       400:
+ *         description: Invalid input (e.g., initialBalance < 1000, duplicate account type)
  *       401:
  *         description: Unauthorized
  *       403:

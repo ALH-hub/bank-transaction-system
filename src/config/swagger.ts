@@ -229,7 +229,7 @@ Authorization: Bearer <access_token>
         // Account Models
         Account: {
           type: 'object',
-          description: 'Bank account owned by a user',
+          description: 'Bank account owned by a user. User cannot have multiple accounts of the same type.',
           properties: {
             id: {
               type: 'string',
@@ -249,7 +249,7 @@ Authorization: Bearer <access_token>
             accountType: {
               type: 'string',
               enum: ['savings', 'checking', 'investment'],
-              description: 'Type of bank account',
+              description: 'Type of bank account. Each user can only have one account per type.',
               example: 'savings',
             },
             balance: {
@@ -469,7 +469,8 @@ Authorization: Bearer <access_token>
             amount: {
               type: 'number',
               format: 'double',
-              description: 'Amount to deposit',
+              minimum: 100,
+              description: 'Amount to deposit (minimum: 100)',
               example: 500.0,
             },
             description: {
@@ -492,7 +493,8 @@ Authorization: Bearer <access_token>
             amount: {
               type: 'number',
               format: 'double',
-              description: 'Amount to withdraw',
+              minimum: 100,
+              description: 'Amount to withdraw (minimum: 100)',
               example: 200.0,
             },
             description: {
