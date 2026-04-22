@@ -1,8 +1,5 @@
 {
-  "all": true,
-  "include": [
-    "src/**/*.ts"
-  ],
+  "include": ["src/**/*.ts"],
   "exclude": [
     "src/main.ts",
     "**/*.test.ts",
@@ -11,23 +8,9 @@
     "dist/**",
     "node_modules/**"
   ],
-  "extension": [
-    ".ts"
-  ],
-  "require": [
-    "tsx/cjs"
-  ],
-  "reporter": [
-    "text",
-    "html",
-    "lcov",
-    "json"
-  ],
-  "temp-dir": ".nyc_output",
-  "report-dir": "coverage",
-  "check-coverage": false,
-  "lines": 70,
-  "functions": 70,
-  "branches": 70,
-  "statements": 70
+  "reporter": ["text", "html", "lcov", "json"],
+  "sourceMap": true,
+  "instrument": true,
+  "cwd": "./",
+  "report-dir": "coverage"
 }

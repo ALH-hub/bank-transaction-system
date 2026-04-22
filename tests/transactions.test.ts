@@ -1,7 +1,9 @@
 import { expect } from 'chai';
 import request from 'supertest';
-import app from '../src/main.js';
+import { createApp } from '../src/app.js';
 import './setup.js';
+
+const app = createApp();
 
 describe('Transaction Routes', () => {
   let accessToken: string;

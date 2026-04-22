@@ -89,12 +89,12 @@ Global test setup and teardown:
 
 ## Key Features
 
-✅ **Endpoint Testing**: Uses actual Express routes via Supertest  
-✅ **Business Rules**: Tests all validation rules (minimum amounts, duplicate types, etc.)  
-✅ **Authorization**: Tests role-based access control  
-✅ **Data Integrity**: Validates balance updates and transaction records  
-✅ **Error Handling**: Tests both success and failure scenarios  
-✅ **Coverage Reports**: HTML, JSON, LCOV, and text format reports  
+✅ **Endpoint Testing**: Uses actual Express routes via Supertest
+✅ **Business Rules**: Tests all validation rules (minimum amounts, duplicate types, etc.)
+✅ **Authorization**: Tests role-based access control
+✅ **Data Integrity**: Validates balance updates and transaction records
+✅ **Error Handling**: Tests both success and failure scenarios
+✅ **Coverage Reports**: HTML, JSON, LCOV, and text format reports
 
 ## Test Organization
 
