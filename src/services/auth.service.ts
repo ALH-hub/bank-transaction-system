@@ -177,14 +177,21 @@ export const authService = {
   },
 
   async logout(token: string) {
-    // Blacklist the token
-    await prisma.token.update({
+    // Blacklist the token (find first to avoid error if it doesn't exist)
+    const storedToken = await prisma.token.findUnique({
       where: { token },
-      data: {
-        isBlacklisted: true,
-        isValid: false,
-      },
     });
+
+    if (storedToken) {
+      await prisma.token.update({
+        where: { token },
+        data: {
+          isBlacklisted: true,
+          isValid: false,
+        },
+      });
+    }
+    // Token already doesn't exist or is invalid - that's fine for logout
   },
 
   async verifyToken(token: string) {

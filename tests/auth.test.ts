@@ -158,20 +158,20 @@ describe('Authentication Routes', () => {
   });
 
   describe('POST /api/auth/logout', () => {
-    let accessToken: string;
+    let refreshToken: string;
 
     beforeEach(async () => {
       const res = await request(app)
         .post('/api/auth/register')
         .send(validRegisterData);
 
-      accessToken = res.body.data.accessToken;
+      refreshToken = res.body.data.refreshToken;
     });
 
     it('should logout successfully', async () => {
       const res = await request(app)
         .post('/api/auth/logout')
-        .set('Authorization', `Bearer ${accessToken}`);
+        .send({ refreshToken });
 
       expect(res.status).to.equal(200);
       expect(res.body.success).to.equal(true);

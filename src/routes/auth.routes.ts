@@ -126,17 +126,26 @@ router.post('/refresh', validate(refreshTokenSchema), authController.refreshToke
  * /api/auth/logout:
  *   post:
  *     summary: Logout user
- *     description: Invalidate current access token (blacklist)
+ *     description: Invalidate refresh token (blacklist)
  *     tags:
  *       - Authentication
- *     security:
- *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
  *     responses:
  *       200:
  *         description: Logout successful
  *       401:
- *         description: Unauthorized
+ *         description: Refresh token required or invalid
  */
-router.post('/logout', authenticate, authController.logout);
+router.post('/logout', authController.logout);
 
 export default router;
