@@ -44,25 +44,6 @@ A comprehensive, production-ready banking system API with full CRUD operations f
 - **Transaction Status**: PENDING, COMPLETED, FAILED, REVERSED states
 - **Balance Tracking**: Before/after balance for each transaction
 
-## User Roles & Permissions Matrix
-
-| Permission | ADMIN | CUSTOMER | TELLER |
-|---|:---:|:---:|:---:|
-| View all users | ✓ | ✗ | ✓ |
-| Manage users (CRUD) | ✓ | ✗ | ✗ |
-| Change user roles | ✓ | ✗ | ✗ |
-| View own profile | ✓ | ✓ | ✓ |
-| Create accounts | ✓ | ✓ | ✗ |
-| View all accounts | ✓ | ✗ | ✓ |
-| Manage own accounts | ✓ | ✓ | ✗ |
-| View own transactions | ✓ | ✓ | ✓ |
-| View all transactions | ✓ | ✗ | ✓ |
-| Deposit (any account) | ✓ | ✓* | ✗ |
-| Withdraw | ✓ | ✓* | ✗ |
-| Transfer | ✓ | ✓* | ✗ |
-
-*Customer operations only on own accounts
-
 ## Authentication
 
 All protected endpoints require the Authorization header:
@@ -229,7 +210,8 @@ Authorization: Bearer <access_token>
         // Account Models
         Account: {
           type: 'object',
-          description: 'Bank account owned by a user. User cannot have multiple accounts of the same type.',
+          description:
+            'Bank account owned by a user. User cannot have multiple accounts of the same type.',
           properties: {
             id: {
               type: 'string',
@@ -249,7 +231,8 @@ Authorization: Bearer <access_token>
             accountType: {
               type: 'string',
               enum: ['savings', 'checking', 'investment'],
-              description: 'Type of bank account. Each user can only have one account per type.',
+              description:
+                'Type of bank account. Each user can only have one account per type.',
               example: 'savings',
             },
             balance: {
