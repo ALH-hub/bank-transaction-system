@@ -1,0 +1,289 @@
+\chapter{Account Management}
+
+\section{Feature Overview}
+Bank account CRUD operations with business rules: minimum initial balance (1000), duplicate account type prevention per user, unique account number generation.
+
+\section{Function: \texttt{getAllAccounts(page = 1, limit = 10)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getAllAccounts(page, limit) → { data, total, page, limit, pages }
+Parameters: page (pagination), limit (items per page)
+\end{verbatim}
+
+\subsection{Execution Path}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{6cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Status} \\
+\hline
+1 & DB available & Query $\rightarrow$ Get accounts $\rightarrow$ Count total $\rightarrow$ Calculate pages $\rightarrow$ Return & 200 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 5 statements
+    \item \textbf{Branch Coverage}: 0 conditional branches
+    \item \textbf{Path Coverage}: 1 path
+\end{itemize}
+
+\section{Function: \texttt{getUserAccounts(userId: string, page = 1, limit = 10)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getUserAccounts(userId, page, limit) → { data, total, page, limit, pages }
+Parameters: userId, page, limit
+\end{verbatim}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & User has accounts & Query $\rightarrow$ Get accounts for user $\rightarrow$ Return data & 200 \\
+\hline
+2 & User has no accounts & Query $\rightarrow$ Get empty list $\rightarrow$ Return empty & 200 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 5 statements
+    \item \textbf{Branch Coverage}: 0 conditional branches
+    \item \textbf{Path Coverage}: 2 paths
+\end{itemize}
+
+\section{Function: \texttt{getAccountById(accountId: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getAccountById(accountId) → account (with user details)
+Parameters: accountId
+\end{verbatim}
+
+\subsection{Decision Points}
+
+\subsubsection{Decision 1: Account Lookup}
+\begin{itemize}
+    \item \textbf{True}: Account found $\rightarrow$ return with user
+    \item \textbf{False}: Account not found $\rightarrow$ throw Error(\textit{``Account not found''})
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Account exists & GetById $\rightarrow$ Find account $\rightarrow$ Return with user & Retrieved & 200 \\
+\hline
+2 & Account not found & GetById $\rightarrow$ Find (not found) $\rightarrow$ Throw & Not found & 404 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 2 statements
+    \item \textbf{Branch Coverage}: 1 branch with 2 paths
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{createAccount(userId: string, data: CreateAccountInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+createAccount(userId, data) → account
+Parameters: userId, data (accountType, currency, initialBalance)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: User Existence}
+\begin{itemize}
+    \item \textbf{True}: User found $\rightarrow$ continue
+    \item \textbf{False}: User not found $\rightarrow$ throw Error(\textit{``User not found''})
+\end{itemize}
+
+\subsubsection{Decision 2: Duplicate Account Type Check}
+\begin{itemize}
+    \item \textbf{True}: Account type exists $\rightarrow$ throw Error(\textit{``User already has a [type] account''})
+    \item \textbf{False}: Account type unique $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 3: Generate Unique Account Number}
+\begin{itemize}
+    \item Loop with retries until unique number found
+    \item Validate minimum balance $\geq 1000$ (Zod schema)
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6.5cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & User exists $\rightarrow$ Type unique $\rightarrow$ Balance $\geq 1000$ & Account created & 201 \\
+\hline
+2 & User not found & User not found & 404 \\
+\hline
+3 & User exists $\rightarrow$ Type duplicate & Type conflict & 400 \\
+\hline
+4 & User exists $\rightarrow$ Balance $< 1000$ & Insufficient balance & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 6 statements
+    \item \textbf{Branch Coverage}: 4 branches (1 success + 2 error tested)
+    \item \textbf{Path Coverage}: 3 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{updateAccount(accountId: string, data: UpdateAccountInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+updateAccount(accountId, data) → account
+Parameters: accountId, data (accountType, currency, isActive)
+\end{verbatim}
+
+\subsection{Decision Points}
+
+\subsubsection{Decision 1: Account Existence}
+\begin{itemize}
+    \item \textbf{True}: Account found $\rightarrow$ update fields
+    \item \textbf{False}: Account not found $\rightarrow$ throw Error(\textit{``Account not found''})
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Account exists & Update $\rightarrow$ Find $\rightarrow$ Update fields $\rightarrow$ Return & Updated & 200 \\
+\hline
+2 & Account not found & Update $\rightarrow$ Find (not found) $\rightarrow$ Throw & Not found & 404 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 3 statements
+    \item \textbf{Branch Coverage}: 1 branch with 2 paths
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{deleteAccount(accountId: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+deleteAccount(accountId) → { message }
+Parameters: accountId
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Account Existence}
+\begin{itemize}
+    \item \textbf{True}: Account found $\rightarrow$ check balance
+    \item \textbf{False}: Account not found $\rightarrow$ throw Error
+\end{itemize}
+
+\subsubsection{Decision 2: Account Balance Check}
+\begin{itemize}
+    \item \textbf{True (non-zero)}: Cannot delete $\rightarrow$ throw Error(\textit{``Cannot delete account with non-zero balance''})
+    \item \textbf{False (zero)}: Delete account $\rightarrow$ continue
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Account exists $\rightarrow$ Balance = 0 & Account deleted & 200 \\
+\hline
+2 & Account not found & Not found & 404 \\
+\hline
+3 & Account exists $\rightarrow$ Balance $\neq$ 0 & Cannot delete & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 4 statements
+    \item \textbf{Branch Coverage}: 2 branches with 4 combinations (1 success + 2 error)
+    \item \textbf{Path Coverage}: 3 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{getAccountByNumber(accountNumber: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getAccountByNumber(accountNumber) → account (with user details)
+Parameters: accountNumber (unique identifier)
+\end{verbatim}
+
+\subsection{Decision Points}
+
+\subsubsection{Decision 1: Account Lookup by Number}
+\begin{itemize}
+    \item \textbf{True}: Account found $\rightarrow$ return with user
+    \item \textbf{False}: Account not found $\rightarrow$ throw Error(\textit{``Account not found''})
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Number exists & GetByNumber $\rightarrow$ Find $\rightarrow$ Return & Retrieved & 200 \\
+\hline
+2 & Number not found & GetByNumber $\rightarrow$ Find (not found) $\rightarrow$ Throw & Not found & 404 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 2 statements
+    \item \textbf{Branch Coverage}: 1 branch with 2 paths
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Summary: Account Management Feature}
+
+\begin{longtable}{|l|c|c|c|}
+\hline
+\textbf{Function} & \textbf{Statements} & \textbf{Branches} & \textbf{Paths} \\
+\hline
+getAllAccounts() & 5 & 0 & 1 \\
+\hline
+getUserAccounts() & 5 & 0 & 2 \\
+\hline
+getAccountById() & 2 & 1 & 2 \\
+\hline
+createAccount() & 6 & 4 & 3 \\
+\hline
+updateAccount() & 3 & 1 & 2 \\
+\hline
+deleteAccount() & 4 & 2 & 3 \\
+\hline
+getAccountByNumber() & 2 & 1 & 2 \\
+\hline
+\textbf{TOTAL} & \textbf{27} & \textbf{9} & \textbf{15} \\
+\hline
+\end{longtable}
+
+\subsection{Key Test Coverage Requirements}
+\begin{itemize}
+    \item Happy path for each CRUD operation
+    \item All error conditions (user not found, account not found, duplicate account type)
+    \item Business rules: minimum initial balance 1000, duplicate account type prevention
+    \item Account deletion with zero balance requirement
+    \item Account number uniqueness generation
+    \item Pagination for account lists
+\end{itemize}

@@ -1,0 +1,261 @@
+\chapter{Authorization \& Access Control Middleware}
+
+\section{Feature Overview}
+JWT authentication middleware with role-based authorization for endpoint access control. Includes stateless access token verification and optional authentication modes.
+
+\section{Middleware: \texttt{authenticate(req, res, next)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+authenticate(req: AuthRequest, res: Response, next: NextFunction) → void
+Purpose: Verify JWT access token and attach user info to request
+Behavior: On success calls next(), on error calls next(error)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Authorization Header Presence}
+\begin{itemize}
+    \item \textbf{True}: Header exists $\rightarrow$ check format
+    \item \textbf{False}: No header $\rightarrow$ throw AppError(\textit{``No authorization token provided''}, 401)
+\end{itemize}
+
+\subsubsection{Decision 2: Bearer Token Format Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{authHeader.startsWith('Bearer ')}
+    \item \textbf{True}: Correct format $\rightarrow$ extract token
+    \item \textbf{False}: Invalid format $\rightarrow$ throw AppError
+\end{itemize}
+
+\subsubsection{Decision 3: Token Verification}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{decoded = verifyToken(token)}
+    \item \textbf{True}: Token valid/not expired $\rightarrow$ continue
+    \item \textbf{False}: Invalid/expired token $\rightarrow$ throw AppError(\textit{``Invalid or expired token''}, 401)
+\end{itemize}
+
+\subsubsection{Decision 4: Request Enhancement}
+\begin{itemize}
+    \item Set \texttt{req.userId = decoded.userId} and \texttt{req.user = decoded}
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Header exists $\rightarrow$ Bearer format $\rightarrow$ Token valid & Auth successful, next() called & 200 \\
+\hline
+2 & No authorization header & Missing token & 401 \\
+\hline
+3 & Header exists $\rightarrow$ Invalid format & Invalid format & 401 \\
+\hline
+4 & Header exists $\rightarrow$ Format OK $\rightarrow$ Token invalid/expired & Invalid/expired token & 401 \\
+\hline
+5 & Any error during process & Generic auth error & 401 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 9 statements
+    \item \textbf{Branch Coverage}: 4 branches with 16 combinations (1 success + 4 error)
+    \item \textbf{Path Coverage}: 5 distinct paths
+\end{itemize}
+
+\section{Middleware: \texttt{authorize(...allowedRoles: string[])}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+authorize(...allowedRoles) → middleware function
+Purpose: Higher-order function that returns middleware to check user role
+Behavior: Checks if authenticated user has one of allowedRoles
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: User Authentication State}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{!req.user}
+    \item \textbf{True}: User not authenticated $\rightarrow$ throw AppError(\textit{``User not authenticated''}, 401)
+    \item \textbf{False}: User authenticated $\rightarrow$ continue to role check
+\end{itemize}
+
+\subsubsection{Decision 2: User Role Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{!allowedRoles.includes(req.user.role)}
+    \item \textbf{True}: Role NOT in allowedRoles $\rightarrow$ throw AppError(\textit{``You don't have permission...''}, 403)
+    \item \textbf{False}: Role IS in allowedRoles $\rightarrow$ continue
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & User authenticated $\rightarrow$ Role in allowedRoles & Auth successful, next() & 200 \\
+\hline
+2 & User not authenticated (req.user missing) & Not authenticated & 401 \\
+\hline
+3 & User authenticated $\rightarrow$ Role NOT in allowedRoles & Insufficient permissions & 403 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 3 statements
+    \item \textbf{Branch Coverage}: 2 branches with 4 combinations (1 success + 2 error)
+    \item \textbf{Path Coverage}: 3 distinct paths
+\end{itemize}
+
+\section{Middleware: \texttt{optionalAuth(req, res, next)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+optionalAuth(req: AuthRequest, res: Response, next: NextFunction) → void
+Purpose: Attempt to authenticate but don't fail if no token provided
+Behavior: Always calls next() regardless of authentication result
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Authorization Header Presence}
+\begin{itemize}
+    \item \textbf{True}: Header exists $\rightarrow$ check format
+    \item \textbf{False}: No header $\rightarrow$ skip auth, call next()
+\end{itemize}
+
+\subsubsection{Decision 2: Bearer Token Format Check}
+\begin{itemize}
+    \item \textbf{True}: Correct format $\rightarrow$ extract token
+    \item \textbf{False}: Invalid format $\rightarrow$ skip verification, call next()
+\end{itemize}
+
+\subsubsection{Decision 3: Token Verification}
+\begin{itemize}
+    \item \textbf{True}: Token valid $\rightarrow$ attach to request
+    \item \textbf{False}: Token invalid $\rightarrow$ ignore error, call next()
+\end{itemize}
+
+\subsubsection{Decision 4: Always Call next()}
+\begin{itemize}
+    \item Called in both try and catch blocks
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Header exists $\rightarrow$ Bearer format $\rightarrow$ Token valid & User info attached, next() & 200 \\
+\hline
+2 & No authorization header & Unauthenticated proceed & 200 \\
+\hline
+3 & Header exists $\rightarrow$ Invalid format & Unauthenticated proceed & 200 \\
+\hline
+4 & Header exists $\rightarrow$ Format OK $\rightarrow$ Token invalid/expired & Error caught, unauthenticated proceed & 200 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 9 statements
+    \item \textbf{Branch Coverage}: 5 branches with 32 combinations (4 success paths, all non-error)
+    \item \textbf{Path Coverage}: 4 distinct paths (all lead to next(), no error responses)
+\end{itemize}
+
+\section{Role-Based Access Control Matrix}
+
+\begin{longtable}{|L{3cm}|L{3.5cm}|L{3.5cm}|}
+\hline
+\textbf{Endpoint Group} & \textbf{Allowed Roles} & \textbf{Middleware Chain} \\
+\hline
+Admin operations (create/delete user, view all users) & ADMIN & authenticate $\rightarrow$ authorize('ADMIN') \\
+\hline
+Teller operations (view all accounts, view all transactions) & ADMIN, TELLER & authenticate $\rightarrow$ authorize('ADMIN', 'TELLER') \\
+\hline
+Customer operations (view own accounts, deposit/withdraw) & ADMIN, CUSTOMER, TELLER & authenticate $\rightarrow$ authorize('ADMIN', 'CUSTOMER', 'TELLER') \\
+\hline
+Authorization required operations & Any authenticated user & authenticate only \\
+\hline
+Public endpoints (register, login) & None & No middleware \\
+\hline
+\end{longtable}
+
+\section{Decision Flow Diagram: Complete Authentication Flow}
+
+\begin{verbatim}
+Request arrives
+    ↓
+Has Authorization Header?
+    ├─→ NO  → 401 "No authorization token provided"
+    └─→ YES → Check Bearer format?
+              ├─→ NO  → 401 "No authorization token provided"
+              └─→ YES → Extract token
+                        ↓
+                        Verify token (signature & expiration)
+                        ├─→ INVALID → 401 "Invalid or expired token"
+                        └─→ VALID   → Attach user info to request
+                                     ↓
+                                     Pass to authorize middleware (if needed)
+                                     ↓
+                                     User has required role?
+                                     ├─→ NO  → 403 "You don't have permission..."
+                                     └─→ YES → Proceed to route handler
+\end{verbatim}
+
+\section{Summary: Authorization \& Access Control Feature}
+
+\begin{longtable}{|l|c|c|c|}
+\hline
+\textbf{Component} & \textbf{Statements} & \textbf{Branches} & \textbf{Paths} \\
+\hline
+authenticate() & 9 & 4 & 5 \\
+\hline
+authorize() & 3 & 2 & 3 \\
+\hline
+optionalAuth() & 9 & 5 & 4 \\
+\hline
+\textbf{TOTAL} & \textbf{21} & \textbf{11} & \textbf{12} \\
+\hline
+\end{longtable}
+
+\subsection{Key Test Coverage Requirements}
+
+\subsubsection{Authenticate Middleware Tests}
+\begin{itemize}
+    \item Valid token with all claims (userId, email, role)
+    \item Missing authorization header
+    \item Invalid Bearer format (missing, incorrect prefix)
+    \item Invalid/expired token
+    \item Correct error responses (401 for auth failures)
+    \item User info properly attached to request
+\end{itemize}
+
+\subsubsection{Authorize Middleware Tests}
+\begin{itemize}
+    \item User has required role (passes through)
+    \item User lacks required role (403 error)
+    \item Not authenticated (missing req.user)
+    \item Multiple allowed roles (user with any role in list passes)
+    \item Single role requirement
+\end{itemize}
+
+\subsubsection{OptionalAuth Middleware Tests}
+\begin{itemize}
+    \item Valid token provided (attaches user info)
+    \item No token provided (continues without user info)
+    \item Invalid token provided (catches error, continues)
+    \item Malformed header (continues without user info)
+    \item Always proceeds (never throws error)
+\end{itemize}
+
+\subsubsection{Integration Tests}
+\begin{itemize}
+    \item Complete auth flow: authenticate $\rightarrow$ authorize $\rightarrow$ endpoint
+    \item Role-based access for different user roles (ADMIN, TELLER, CUSTOMER)
+    \item Mixed authentication scenarios with optionalAuth
+\end{itemize}

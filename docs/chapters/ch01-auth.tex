@@ -1,0 +1,262 @@
+\chapter{Authentication \& Token Management}
+
+\section{Feature Overview}
+Authentication service with JWT token management (access tokens for stateless verification, refresh tokens for persistent storage and logout).
+
+\section{Function: \texttt{register(data: RegisterInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+register(data: RegisterInput) → { user, accessToken, refreshToken }
+Parameters: firstName, lastName, email, phone, password, role?
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Email Uniqueness Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{existingEmail = prisma.user.findUnique(\{where: \{email\}\})}
+    \item \textbf{Branch A (True)}: Email exists $\rightarrow$ throw Error(\textit{``Email already exists''})
+    \item \textbf{Branch B (False)}: Email unique $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 2: Phone Uniqueness Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{existingPhone = prisma.user.findUnique(\{where: \{phone\}\})}
+    \item \textbf{Branch A (True)}: Phone exists $\rightarrow$ throw Error(\textit{``Phone number already exists''})
+    \item \textbf{Branch B (False)}: Phone unique $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 3-7: Processing Steps}
+\begin{enumerate}
+    \item Password Hashing (deterministic)
+    \item User Creation (should succeed with valid data)
+    \item Token Generation (deterministic)
+    \item Delete Old Tokens (idempotent)
+    \item Store Refresh Token (deterministic)
+\end{enumerate}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{6cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Email unique $\rightarrow$ Phone unique $\rightarrow$ User created $\rightarrow$ Success & Register $\rightarrow$ Hash password $\rightarrow$ Create user $\rightarrow$ Generate tokens $\rightarrow$ Delete old $\rightarrow$ Store refresh token $\rightarrow$ Return user+tokens & User created with tokens & 201 \\
+\hline
+2 & Email exists & Register $\rightarrow$ Find email $\rightarrow$ Throw error & Email conflict & 400 \\
+\hline
+3 & Email unique $\rightarrow$ Phone exists & Register $\rightarrow$ Find email (unique) $\rightarrow$ Find phone $\rightarrow$ Throw error & Phone conflict & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 8 statements
+    \item \textbf{Branch Coverage}: 2 branches with 4 combinations (1 success path + 2 error paths)
+    \item \textbf{Path Coverage}: 3 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{login(data: LoginInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+login(data: LoginInput) → { user, accessToken, refreshToken }
+Parameters: email, password
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: User Lookup}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{user = prisma.user.findUnique(\{where: \{email\}\})}
+    \item \textbf{Branch A (True)}: User found $\rightarrow$ continue
+    \item \textbf{Branch B (False)}: User not found $\rightarrow$ throw Error(\textit{``Invalid credentials''})
+\end{itemize}
+
+\subsubsection{Decision 2: Password Verification}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{isPasswordValid = verifyPassword(password, user.password)}
+    \item \textbf{Branch A (True)}: Password valid $\rightarrow$ continue
+    \item \textbf{Branch B (False)}: Password invalid $\rightarrow$ throw Error(\textit{``Invalid credentials''})
+\end{itemize}
+
+\subsubsection{Decision 3: Account Active Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{user.isActive}
+    \item \textbf{Branch A (True)}: User active $\rightarrow$ continue
+    \item \textbf{Branch B (False)}: User deactivated $\rightarrow$ throw Error(\textit{``User account is deactivated''})
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Conditions} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & User exists $\rightarrow$ Password valid $\rightarrow$ Active & Login $\rightarrow$ Find user $\rightarrow$ Verify password $\rightarrow$ Check active $\rightarrow$ Generate tokens $\rightarrow$ Return & Login successful & 200 \\
+\hline
+2 & User not found & Login $\rightarrow$ Find user (not found) $\rightarrow$ Throw error & Auth failed & 401 \\
+\hline
+3 & User exists $\rightarrow$ Password invalid & Login $\rightarrow$ Find user $\rightarrow$ Verify (fails) $\rightarrow$ Throw error & Auth failed & 401 \\
+\hline
+4 & User exists $\rightarrow$ Password valid $\rightarrow$ Deactivated & Login $\rightarrow$ Find user $\rightarrow$ Verify $\rightarrow$ Check active (false) $\rightarrow$ Throw error & User deactivated & 403 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 7 statements
+    \item \textbf{Branch Coverage}: 3 branches with 8 combinations (1 success + 3 error paths)
+    \item \textbf{Path Coverage}: 4 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{refreshAccessToken(refreshToken: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+refreshAccessToken(refreshToken: string) → { accessToken, refreshToken }
+Parameters: refreshToken
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1-5: Token Validation Chain}
+\begin{enumerate}
+    \item Token Decoding: Token must decode successfully
+    \item Token in Database: Token must be found in storage
+    \item Token Validity \& Blacklist: Token must be valid and not blacklisted
+    \item Token Expiration: Token must not be expired
+    \item User Lookup: User must exist in database
+\end{enumerate}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{6cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Decode $\rightarrow$ Found $\rightarrow$ Valid $\rightarrow$ Not expired $\rightarrow$ User exists & Token refreshed & 200 \\
+\hline
+2 & Token invalid decode & Invalid token & 401 \\
+\hline
+3 & Token $\rightarrow$ Not found in DB & Token revoked & 401 \\
+\hline
+4 & Token $\rightarrow$ Found $\rightarrow$ Invalid/blacklisted & Token revoked & 401 \\
+\hline
+5 & Token $\rightarrow$ Found $\rightarrow$ Valid $\rightarrow$ Expired & Token expired & 401 \\
+\hline
+6 & All valid $\rightarrow$ User not found & User not found & 404 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 7 statements
+    \item \textbf{Branch Coverage}: 5 branches with 32 combinations (1 success + 5 error paths)
+    \item \textbf{Path Coverage}: 6 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{logout(token: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+logout(token: string) → void (idempotent operation)
+Parameters: token (refresh token)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Token Lookup}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{storedToken = prisma.token.findUnique(\{where: \{token\}\})}
+    \item \textbf{Branch A (True)}: Token found $\rightarrow$ blacklist it
+    \item \textbf{Branch B (False)}: Token not found $\rightarrow$ skip (idempotent)
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{2cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Token found in DB & Logout $\rightarrow$ Find token $\rightarrow$ Update (blacklist, set invalid) & Token blacklisted & 200 \\
+\hline
+2 & Token not found in DB & Logout $\rightarrow$ Find (not found) $\rightarrow$ No operation & Idempotent success & 200 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 3 statements
+    \item \textbf{Branch Coverage}: 1 branch with 2 paths (both success)
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{verifyToken(token: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+verifyToken(token: string) → storedToken (object)
+Parameters: token (typically refresh token)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1-3: Token Verification Chain}
+\begin{enumerate}
+    \item Token Lookup: Token must exist in database
+    \item Validity \& Blacklist Check: Token must be valid and not blacklisted
+    \item Expiration Check: Token must not be expired
+\end{enumerate}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6.5cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & In DB $\rightarrow$ Valid $\rightarrow$ Not expired & Token verified & 200 \\
+\hline
+2 & Not in DB & Token not found & 401 \\
+\hline
+3 & In DB $\rightarrow$ Invalid/blacklisted & Token invalid & 401 \\
+\hline
+4 & In DB $\rightarrow$ Valid $\rightarrow$ Expired & Token expired & 401 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 4 statements
+    \item \textbf{Branch Coverage}: 3 branches with 8 combinations (1 success + 3 error paths)
+    \item \textbf{Path Coverage}: 4 distinct paths
+\end{itemize}
+
+\section{Summary: Authentication Feature}
+
+\begin{longtable}{|l|c|c|c|}
+\hline
+\textbf{Function} & \textbf{Statements} & \textbf{Branches} & \textbf{Paths} \\
+\hline
+register() & 8 & 2 & 3 \\
+\hline
+login() & 7 & 3 & 4 \\
+\hline
+refreshAccessToken() & 7 & 5 & 6 \\
+\hline
+logout() & 3 & 1 & 2 \\
+\hline
+verifyToken() & 4 & 3 & 4 \\
+\hline
+\textbf{TOTAL} & \textbf{29} & \textbf{14} & \textbf{19} \\
+\hline
+\end{longtable}
+
+\subsection{Key Test Coverage Requirements}
+\begin{itemize}
+    \item Happy path for each function
+    \item All error conditions (user not found, invalid token, expired token, deactivated user, email/phone conflicts)
+    \item Idempotent operations (logout, delete old tokens)
+    \item All decision point combinations
+\end{itemize}

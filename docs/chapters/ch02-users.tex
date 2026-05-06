@@ -1,0 +1,271 @@
+\chapter{User Management}
+
+\section{Feature Overview}
+User CRUD operations with role-based management, activation/deactivation, and pagination support.
+
+\section{Function: \texttt{getAllUsers(page = 1, limit = 10)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getAllUsers(page, limit) → { data, total, page, limit, pages }
+Parameters: page (pagination), limit (items per page)
+\end{verbatim}
+
+\subsection{Decision Points}
+\begin{enumerate}
+    \item Pagination Calculation (deterministic)
+    \item Query Users with pagination
+    \item Calculate Total Pages (deterministic)
+\end{enumerate}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{2.5cm}|L{1cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & DB available & Query $\rightarrow$ Get users $\rightarrow$ Count total $\rightarrow$ Calculate pages $\rightarrow$ Return & Pagination successful & 200 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 5 statements
+    \item \textbf{Branch Coverage}: 0 conditional branches
+    \item \textbf{Path Coverage}: 1 path
+\end{itemize}
+
+\section{Function: \texttt{getUserById(id: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getUserById(id) → user (object with accounts)
+Parameters: id (user ID)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: User Lookup}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{user = prisma.user.findUnique(\{where: \{id\}\})}
+    \item \textbf{Branch A (True)}: User found $\rightarrow$ return with accounts
+    \item \textbf{Branch B (False)}: User not found $\rightarrow$ throw Error(\textit{``User not found''})
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & User exists & GetById $\rightarrow$ Find user $\rightarrow$ Return with accounts & User retrieved & 200 \\
+\hline
+2 & User not found & GetById $\rightarrow$ Find (not found) $\rightarrow$ Throw error & Not found & 404 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 2 statements
+    \item \textbf{Branch Coverage}: 1 branch with 2 paths
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{createUser(data: CreateUserInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+createUser(data) → user
+Parameters: firstName, lastName, email, phone, password?, role?
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Email Uniqueness}
+\begin{itemize}
+    \item \textbf{Branch A}: Email exists $\rightarrow$ throw Error(\textit{``Email already exists''})
+    \item \textbf{Branch B}: Email unique $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 2: Phone Uniqueness}
+\begin{itemize}
+    \item \textbf{Branch A}: Phone exists $\rightarrow$ throw Error(\textit{``Phone number already exists''})
+    \item \textbf{Branch B}: Phone unique $\rightarrow$ continue
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{6cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Email unique $\rightarrow$ Phone unique & User created & 201 \\
+\hline
+2 & Email exists & Email conflict & 400 \\
+\hline
+3 & Email unique $\rightarrow$ Phone exists & Phone conflict & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 6 statements
+    \item \textbf{Branch Coverage}: 2 branches with 4 combinations (1 success + 2 error)
+    \item \textbf{Path Coverage}: 3 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{updateUser(id: string, data: Partial<CreateUserInput>)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+updateUser(id, data) → user
+Parameters: id, data (firstName, lastName, email, phone, role)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: User Existence}
+\begin{itemize}
+    \item \textbf{Condition}: User must exist in database
+    \item \textbf{False path}: Throw Error(\textit{``User not found''})
+\end{itemize}
+
+\subsubsection{Decision 2-5: Conditional Uniqueness Checks}
+\begin{enumerate}
+    \item Email changed? If yes, check uniqueness
+    \item Phone changed? If yes, check uniqueness
+\end{enumerate}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6.5cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Conditions} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & User exists $\rightarrow$ Update & User updated & 200 \\
+\hline
+2 & User not found & Not found & 404 \\
+\hline
+3 & User exists $\rightarrow$ Email changed $\rightarrow$ Exists & Email conflict & 400 \\
+\hline
+4 & User exists $\rightarrow$ Phone changed $\rightarrow$ Exists & Phone conflict & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 7 statements
+    \item \textbf{Branch Coverage}: 5 branches with 32 combinations (1 success + 3 error)
+    \item \textbf{Path Coverage}: 4 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{deleteUser(id: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+deleteUser(id) → { message }
+Parameters: id
+\end{verbatim}
+
+\subsection{Decision Points}
+
+\subsubsection{Decision 1: User Existence}
+\begin{itemize}
+    \item \textbf{True}: User found $\rightarrow$ delete user
+    \item \textbf{False}: User not found $\rightarrow$ throw Error(\textit{``User not found''})
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & User exists & Delete $\rightarrow$ Find user $\rightarrow$ Delete $\rightarrow$ Return & User deleted & 200 \\
+\hline
+2 & User not found & Delete $\rightarrow$ Find (not found) $\rightarrow$ Throw & Not found & 404 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 3 statements
+    \item \textbf{Branch Coverage}: 1 branch with 2 paths
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{getUserByEmail(email: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getUserByEmail(email) → user (or null)
+Parameters: email
+\end{verbatim}
+
+\subsection{Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} \\
+\hline
+1 & User found & Query $\rightarrow$ Find by email $\rightarrow$ Return user & User retrieved \\
+\hline
+2 & User not found & Query $\rightarrow$ Find (not found) $\rightarrow$ Return null & No result \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 2 statements
+    \item \textbf{Branch Coverage}: 0 conditional branches (returns null)
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Functions: \texttt{activateUser}, \texttt{deactivateUser}, \texttt{updateUserRole}}
+
+All three functions follow similar patterns with one decision point (user existence) and simple state updates.
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{activateUser()}: 3 statements, 1 branch, 2 paths
+    \item \textbf{deactivateUser()}: 3 statements, 1 branch, 2 paths
+    \item \texttt{updateUserRole()}: 3 statements, 1 branch, 2 paths
+\end{itemize}
+
+\section{Summary: User Management Feature}
+
+\begin{longtable}{|l|c|c|c|}
+\hline
+\textbf{Function} & \textbf{Statements} & \textbf{Branches} & \textbf{Paths} \\
+\hline
+getAllUsers() & 5 & 0 & 1 \\
+\hline
+getUserById() & 2 & 1 & 2 \\
+\hline
+createUser() & 6 & 2 & 3 \\
+\hline
+updateUser() & 7 & 5 & 4 \\
+\hline
+deleteUser() & 3 & 1 & 2 \\
+\hline
+getUserByEmail() & 2 & 0 & 2 \\
+\hline
+activateUser() & 3 & 1 & 2 \\
+\hline
+deactivateUser() & 3 & 1 & 2 \\
+\hline
+updateUserRole() & 3 & 1 & 2 \\
+\hline
+\textbf{TOTAL} & \textbf{34} & \textbf{11} & \textbf{20} \\
+\hline
+\end{longtable}
+
+\subsection{Key Test Coverage Requirements}
+\begin{itemize}
+    \item Happy path for each CRUD operation
+    \item All error conditions (user not found, email/phone conflicts)
+    \item Email/phone uniqueness only checked when values change
+    \item Role assignment with all three roles (ADMIN, CUSTOMER, TELLER)
+    \item Activation/deactivation state changes
+    \item Default values (password, role)
+\end{itemize}

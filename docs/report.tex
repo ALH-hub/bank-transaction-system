@@ -1,0 +1,81 @@
+\documentclass[12pt,a4paper]{report}
+
+% Packages
+\usepackage[margin=1in]{geometry}
+\usepackage{lmodern}
+\usepackage{fancyhdr}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage{setspace}
+
+% Styling
+\onehalfspacing
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    urlcolor=blue,
+    pdftitle={Bank Transaction System - CFG \& Test Coverage Report},
+    pdfauthor={Banking System Documentation},
+    pdfsubject={Control Flow Graphs and Test Coverage}
+}
+
+% Headers and Footers
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\nouppercase{\leftmark}}
+\fancyhead[R]{\thepage}
+\fancyfoot[C]{\thepage}
+
+% Define column width for tables
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+% Title Page
+\title{
+\Large \textbf{University of Yaoundé I -- Faculty of Sciences}\\[0.2cm]
+\large \textbf{Department of Computer Science}\\
+\large \textbf{Bachelor's Degree in Computer Science}\\[0.8cm]
+\LARGE \textbf{Bank Transaction System}\\[0.5cm]
+\Large Control Flow Graphs \& Test Coverage Report\\[0.35cm]
+\Large \textbf{Assignment INF352 - Software Testing and Quality Assurance}
+}
+\author{\large \textbf{Student Name:} ALHADJI OUMATE\\
+\large \textbf{Student ID:} 22U2033\\
+\large \textbf{Instructor:} Prof. Pr. KIMBI XAVIER}
+\date{}
+
+
+\begin{document}
+
+% Title Page
+\maketitle
+
+% Table of Contents
+\newpage
+\tableofcontents
+
+% Main Chapters
+\newpage
+\input{chapters/ch01-auth.tex}
+
+\newpage
+\input{chapters/ch02-users.tex}
+
+\newpage
+\input{chapters/ch03-accounts.tex}
+
+\newpage
+\input{chapters/ch04-transactions.tex}
+
+\newpage
+\input{chapters/ch05-authorization.tex}
+
+\newpage
+\input{chapters/ch06-coverage.tex}
+
+\end{document}

@@ -1,0 +1,445 @@
+\relax 
+\providecommand\hyper@newdestlabel[2]{}
+\providecommand\HyField@AuxAddToFields[1]{}
+\providecommand\HyField@AuxAddToCoFields[2]{}
+\@writefile{toc}{\contentsline {chapter}{\numberline {1}Authentication \& Token Management}{7}{chapter.1}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {1.1}Feature Overview}{7}{section.1.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.2}Function: \texttt  {register(data: RegisterInput)}}{7}{section.1.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.1}Entry Point}{7}{subsection.1.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.2}Decision Points \& Branches}{7}{subsection.1.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Email Uniqueness Check}{7}{section*.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Phone Uniqueness Check}{7}{section*.3}\protected@file@percent }
+\gdef \LT@i {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3-7: Processing Steps}{8}{section*.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.3}All Execution Paths}{8}{subsection.1.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.2.4}Coverage Summary}{8}{subsection.1.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.3}Function: \texttt  {login(data: LoginInput)}}{8}{section.1.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3.1}Entry Point}{8}{subsection.1.3.1}\protected@file@percent }
+\gdef \LT@ii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3.2}Decision Points \& Branches}{9}{subsection.1.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: User Lookup}{9}{section*.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Password Verification}{9}{section*.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3: Account Active Check}{9}{section*.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3.3}All Execution Paths}{9}{subsection.1.3.3}\protected@file@percent }
+\gdef \LT@iii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.3.4}Coverage Summary}{10}{subsection.1.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.4}Function: \texttt  {refreshAccessToken(refreshToken: string)}}{10}{section.1.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4.1}Entry Point}{10}{subsection.1.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4.2}Decision Points \& Branches}{10}{subsection.1.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1-5: Token Validation Chain}{10}{section*.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4.3}All Execution Paths}{10}{subsection.1.4.3}\protected@file@percent }
+\gdef \LT@iv {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{69.3055pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.4.4}Coverage Summary}{11}{subsection.1.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.5}Function: \texttt  {logout(token: string)}}{11}{section.1.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5.1}Entry Point}{11}{subsection.1.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5.2}Decision Points \& Branches}{11}{subsection.1.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Token Lookup}{11}{section*.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5.3}All Execution Paths}{11}{subsection.1.5.3}\protected@file@percent }
+\gdef \LT@v {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{197.3429pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.5.4}Coverage Summary}{12}{subsection.1.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {1.6}Function: \texttt  {verifyToken(token: string)}}{12}{section.1.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6.1}Entry Point}{12}{subsection.1.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6.2}Decision Points \& Branches}{12}{subsection.1.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1-3: Token Verification Chain}{12}{section*.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6.3}All Execution Paths}{12}{subsection.1.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.6.4}Coverage Summary}{12}{subsection.1.6.4}\protected@file@percent }
+\gdef \LT@vi {\LT@entry 
+    {1}{120.698pt}\LT@entry 
+    {1}{78.23247pt}\LT@entry 
+    {1}{66.18347pt}\LT@entry 
+    {1}{45.88449pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {1.7}Summary: Authentication Feature}{13}{section.1.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {1.7.1}Key Test Coverage Requirements}{13}{subsection.1.7.1}\protected@file@percent }
+\gdef \LT@vii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{40.85274pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {2}User Management}{14}{chapter.2}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {2.1}Feature Overview}{14}{section.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.2}Function: \texttt  {getAllUsers(page = 1, limit = 10)}}{14}{section.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.1}Entry Point}{14}{subsection.2.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.2}Decision Points}{14}{subsection.2.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.3}All Execution Paths}{14}{subsection.2.2.3}\protected@file@percent }
+\gdef \LT@viii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2.4}Coverage Summary}{15}{subsection.2.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.3}Function: \texttt  {getUserById(id: string)}}{15}{section.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.1}Entry Point}{15}{subsection.2.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.2}Decision Points \& Branches}{15}{subsection.2.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: User Lookup}{15}{section*.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.3}All Execution Paths}{15}{subsection.2.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3.4}Coverage Summary}{15}{subsection.2.3.4}\protected@file@percent }
+\gdef \LT@ix {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {2.4}Function: \texttt  {createUser(data: CreateUserInput)}}{16}{section.2.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.1}Entry Point}{16}{subsection.2.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.2}Decision Points \& Branches}{16}{subsection.2.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Email Uniqueness}{16}{section*.12}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Phone Uniqueness}{16}{section*.13}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.3}All Execution Paths}{16}{subsection.2.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4.4}Coverage Summary}{16}{subsection.2.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.5}Function: \texttt  {updateUser(id: string, data: Partial<CreateUserInput>)}}{16}{section.2.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.1}Entry Point}{16}{subsection.2.5.1}\protected@file@percent }
+\gdef \LT@x {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{197.3429pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.2}Decision Points \& Branches}{17}{subsection.2.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: User Existence}{17}{section*.14}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2-5: Conditional Uniqueness Checks}{17}{section*.15}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.3}All Execution Paths}{17}{subsection.2.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5.4}Coverage Summary}{17}{subsection.2.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.6}Function: \texttt  {deleteUser(id: string)}}{17}{section.2.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6.1}Entry Point}{17}{subsection.2.6.1}\protected@file@percent }
+\gdef \LT@xi {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\gdef \LT@xii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6.2}Decision Points}{18}{subsection.2.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: User Existence}{18}{section*.16}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6.3}All Execution Paths}{18}{subsection.2.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.6.4}Coverage Summary}{18}{subsection.2.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.7}Function: \texttt  {getUserByEmail(email: string)}}{18}{section.2.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7.1}Entry Point}{18}{subsection.2.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7.2}Execution Paths}{18}{subsection.2.7.2}\protected@file@percent }
+\gdef \LT@xiii {\LT@entry 
+    {1}{105.55096pt}\LT@entry 
+    {1}{78.23247pt}\LT@entry 
+    {1}{66.18347pt}\LT@entry 
+    {1}{45.88449pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.7.3}Coverage Summary}{19}{subsection.2.7.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.8}Functions: \texttt  {activateUser}, \texttt  {deactivateUser}, \texttt  {updateUserRole}}{19}{section.2.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.8.1}Coverage Summary}{19}{subsection.2.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {2.9}Summary: User Management Feature}{19}{section.2.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.9.1}Key Test Coverage Requirements}{20}{subsection.2.9.1}\protected@file@percent }
+\gdef \LT@xiv {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {3}Account Management}{21}{chapter.3}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {3.1}Feature Overview}{21}{section.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.2}Function: \texttt  {getAllAccounts(page = 1, limit = 10)}}{21}{section.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.1}Entry Point}{21}{subsection.3.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.2}Execution Path}{21}{subsection.3.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2.3}Coverage Summary}{21}{subsection.3.2.3}\protected@file@percent }
+\gdef \LT@xv {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.3}Function: \texttt  {getUserAccounts(userId: string, page = 1, limit = 10)}}{22}{section.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.1}Entry Point}{22}{subsection.3.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.2}All Execution Paths}{22}{subsection.3.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.3.3}Coverage Summary}{22}{subsection.3.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.4}Function: \texttt  {getAccountById(accountId: string)}}{22}{section.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.1}Entry Point}{22}{subsection.3.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.2}Decision Points}{22}{subsection.3.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Account Lookup}{22}{section*.17}\protected@file@percent }
+\gdef \LT@xvi {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.3}All Execution Paths}{23}{subsection.3.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.4.4}Coverage Summary}{23}{subsection.3.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.5}Function: \texttt  {createAccount(userId: string, data: CreateAccountInput)}}{23}{section.3.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.1}Entry Point}{23}{subsection.3.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.2}Decision Points \& Branches}{23}{subsection.3.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: User Existence}{23}{section*.18}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Duplicate Account Type Check}{23}{section*.19}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3: Generate Unique Account Number}{23}{section*.20}\protected@file@percent }
+\gdef \LT@xvii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{197.3429pt}\LT@entry 
+    {1}{55.07912pt}}
+\gdef \LT@xviii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.3}All Execution Paths}{24}{subsection.3.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.5.4}Coverage Summary}{24}{subsection.3.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.6}Function: \texttt  {updateAccount(accountId: string, data: UpdateAccountInput)}}{24}{section.3.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.1}Entry Point}{24}{subsection.3.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.2}Decision Points}{24}{subsection.3.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Account Existence}{24}{section*.21}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.3}All Execution Paths}{24}{subsection.3.6.3}\protected@file@percent }
+\gdef \LT@xix {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.6.4}Coverage Summary}{25}{subsection.3.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.7}Function: \texttt  {deleteAccount(accountId: string)}}{25}{section.3.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.1}Entry Point}{25}{subsection.3.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.2}Decision Points \& Branches}{25}{subsection.3.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Account Existence}{25}{section*.22}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Account Balance Check}{25}{section*.23}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.3}All Execution Paths}{25}{subsection.3.7.3}\protected@file@percent }
+\gdef \LT@xx {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.7.4}Coverage Summary}{26}{subsection.3.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {3.8}Function: \texttt  {getAccountByNumber(accountNumber: string)}}{26}{section.3.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.1}Entry Point}{26}{subsection.3.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.2}Decision Points}{26}{subsection.3.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Account Lookup by Number}{26}{section*.24}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.3}All Execution Paths}{26}{subsection.3.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.8.4}Coverage Summary}{26}{subsection.3.8.4}\protected@file@percent }
+\gdef \LT@xxi {\LT@entry 
+    {1}{135.67422pt}\LT@entry 
+    {1}{78.23247pt}\LT@entry 
+    {1}{66.18347pt}\LT@entry 
+    {1}{45.88449pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {3.9}Summary: Account Management Feature}{27}{section.3.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.9.1}Key Test Coverage Requirements}{27}{subsection.3.9.1}\protected@file@percent }
+\gdef \LT@xxii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {chapter}{\numberline {4}Transaction Processing}{28}{chapter.4}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {4.1}Feature Overview}{28}{section.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.2}Function: \texttt  {getAllTransactions(page = 1, limit = 10)}}{28}{section.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.1}Entry Point}{28}{subsection.4.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.2}All Execution Paths}{28}{subsection.4.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2.3}Coverage Summary}{28}{subsection.4.2.3}\protected@file@percent }
+\gdef \LT@xxiii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.3}Function: \texttt  {getAccountTransactions(accountId: string, page = 1, limit = 10)}}{29}{section.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.1}Entry Point}{29}{subsection.4.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.2}All Execution Paths}{29}{subsection.4.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3.3}Coverage Summary}{29}{subsection.4.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.4}Function: \texttt  {deposit(userId: string, data: DepositInput)}}{29}{section.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.1}Entry Point}{29}{subsection.4.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.2}Decision Points \& Branches}{29}{subsection.4.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Account Existence}{29}{section*.25}\protected@file@percent }
+\gdef \LT@xxiv {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Account Ownership/Role Check}{30}{section*.26}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3: Account Active Check}{30}{section*.27}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 4: Amount Validation}{30}{section*.28}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.3}All Execution Paths}{30}{subsection.4.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4.4}Coverage Summary}{30}{subsection.4.4.4}\protected@file@percent }
+\gdef \LT@xxv {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {4.5}Function: \texttt  {withdraw(userId: string, data: WithdrawInput)}}{31}{section.4.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.1}Entry Point}{31}{subsection.4.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.2}Decision Points \& Branches}{31}{subsection.4.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Account Existence}{31}{section*.29}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Account Ownership}{31}{section*.30}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3: Account Active Check}{31}{section*.31}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 4: Sufficient Balance Check}{31}{section*.32}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 5: Amount Validation}{31}{section*.33}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.3}All Execution Paths}{31}{subsection.4.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5.4}Coverage Summary}{32}{subsection.4.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.6}Function: \texttt  {transfer(userId: string, data: TransferInput)}}{32}{section.4.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.1}Entry Point}{32}{subsection.4.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.2}Decision Points \& Branches}{32}{subsection.4.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: From Account Existence}{32}{section*.34}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: To Account Existence}{32}{section*.35}\protected@file@percent }
+\gdef \LT@xxvi {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{140.4374pt}\LT@entry 
+    {1}{55.07912pt}}
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3: From Account Ownership}{33}{section*.36}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 4: Both Accounts Active Check}{33}{section*.37}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 5: Sufficient Balance}{33}{section*.38}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 6: Self-Transfer Check}{33}{section*.39}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 7: Amount Validation}{33}{section*.40}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.3}All Execution Paths}{33}{subsection.4.6.3}\protected@file@percent }
+\gdef \LT@xxvii {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{168.89014pt}\LT@entry 
+    {1}{83.53188pt}\LT@entry 
+    {1}{46.54321pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.6.4}Coverage Summary}{34}{subsection.4.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.7}Function: \texttt  {getTransactionByReference(reference: string)}}{34}{section.4.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.1}Entry Point}{34}{subsection.4.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.2}Decision Points}{34}{subsection.4.7.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Transaction Lookup}{34}{section*.41}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.3}All Execution Paths}{34}{subsection.4.7.3}\protected@file@percent }
+\gdef \LT@xxviii {\LT@entry 
+    {1}{162.01904pt}\LT@entry 
+    {1}{78.23247pt}\LT@entry 
+    {1}{66.18347pt}\LT@entry 
+    {1}{45.88449pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.7.4}Coverage Summary}{35}{subsection.4.7.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4.8}Summary: Transaction Processing Feature}{35}{section.4.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.8.1}Key Test Coverage Requirements}{35}{subsection.4.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {5}Authorization \& Access Control Middleware}{36}{chapter.5}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {5.1}Feature Overview}{36}{section.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.2}Middleware: \texttt  {authenticate(req, res, next)}}{36}{section.5.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.1}Entry Point}{36}{subsection.5.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.2}Decision Points \& Branches}{36}{subsection.5.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Authorization Header Presence}{36}{section*.42}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Bearer Token Format Check}{36}{section*.43}\protected@file@percent }
+\gdef \LT@xxix {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{69.3055pt}}
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3: Token Verification}{37}{section*.44}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 4: Request Enhancement}{37}{section*.45}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.3}All Execution Paths}{37}{subsection.5.2.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2.4}Coverage Summary}{37}{subsection.5.2.4}\protected@file@percent }
+\gdef \LT@xxx {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{69.3055pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.3}Middleware: \texttt  {authorize(...allowedRoles: string[])}}{38}{section.5.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.1}Entry Point}{38}{subsection.5.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.2}Decision Points \& Branches}{38}{subsection.5.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: User Authentication State}{38}{section*.46}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: User Role Check}{38}{section*.47}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.3}All Execution Paths}{38}{subsection.5.3.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3.4}Coverage Summary}{39}{subsection.5.3.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.4}Middleware: \texttt  {optionalAuth(req, res, next)}}{39}{section.5.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.1}Entry Point}{39}{subsection.5.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.2}Decision Points \& Branches}{39}{subsection.5.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 1: Authorization Header Presence}{39}{section*.48}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 2: Bearer Token Format Check}{39}{section*.49}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 3: Token Verification}{39}{section*.50}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Decision 4: Always Call next()}{39}{section*.51}\protected@file@percent }
+\gdef \LT@xxxi {\LT@entry 
+    {1}{35.56227pt}\LT@entry 
+    {1}{97.75826pt}\LT@entry 
+    {1}{183.11652pt}\LT@entry 
+    {1}{69.3055pt}}
+\gdef \LT@xxxii {\LT@entry 
+    {1}{98.15825pt}\LT@entry 
+    {1}{111.98463pt}\LT@entry 
+    {1}{111.98463pt}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.3}All Execution Paths}{40}{subsection.5.4.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.4.4}Coverage Summary}{40}{subsection.5.4.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.5}Role-Based Access Control Matrix}{40}{section.5.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {5.6}Decision Flow Diagram: Complete Authentication Flow}{41}{section.5.6}\protected@file@percent }
+\gdef \LT@xxxiii {\LT@entry 
+    {1}{89.82382pt}\LT@entry 
+    {1}{78.23247pt}\LT@entry 
+    {1}{66.18347pt}\LT@entry 
+    {1}{45.88449pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {5.7}Summary: Authorization \& Access Control Feature}{42}{section.5.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.7.1}Key Test Coverage Requirements}{42}{subsection.5.7.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Authenticate Middleware Tests}{42}{section*.52}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Authorize Middleware Tests}{42}{section*.53}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{OptionalAuth Middleware Tests}{42}{section*.54}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{Integration Tests}{43}{section*.55}\protected@file@percent }
+\@writefile{toc}{\contentsline {chapter}{\numberline {6}Test Coverage Mapping}{44}{chapter.6}\protected@file@percent }
+\@writefile{lof}{\addvspace {10\p@ }}
+\@writefile{lot}{\addvspace {10\p@ }}
+\@writefile{toc}{\contentsline {section}{\numberline {6.1}Overview}{44}{section.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.2}Feature 1: Authentication \& Token Management}{44}{section.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.1}Summary}{44}{subsection.6.2.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.2.2}Coverage Status}{44}{subsection.6.2.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.3}Feature 2: User Management}{44}{section.6.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.1}Summary}{44}{subsection.6.3.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.3.2}Coverage Status}{45}{subsection.6.3.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.4}Feature 3: Account Management}{45}{section.6.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.1}Summary}{45}{subsection.6.4.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.4.2}Coverage Status}{45}{subsection.6.4.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.5}Feature 4: Transaction Processing}{45}{section.6.5}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.1}Summary}{45}{subsection.6.5.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.5.2}Coverage Status}{45}{subsection.6.5.2}\protected@file@percent }
+\gdef \LT@xxxiv {\LT@entry 
+    {1}{131.30917pt}\LT@entry 
+    {1}{78.23247pt}\LT@entry 
+    {1}{66.18347pt}\LT@entry 
+    {1}{45.88449pt}\LT@entry 
+    {1}{57.02501pt}\LT@entry 
+    {1}{70.4485pt}\LT@entry 
+    {1}{56.30951pt}}
+\@writefile{toc}{\contentsline {section}{\numberline {6.6}Feature 5: Authorization \& Access Control}{46}{section.6.6}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.1}Summary}{46}{subsection.6.6.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.6.2}Coverage Status}{46}{subsection.6.6.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.7}Coverage Totals Across All Features}{46}{section.6.7}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.8}Coverage Requirements Status}{46}{section.6.8}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.1}Statement Coverage}{46}{subsection.6.8.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.2}Branch Coverage}{46}{subsection.6.8.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.3}Function Coverage}{47}{subsection.6.8.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.8.4}Path Coverage}{47}{subsection.6.8.4}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.9}Test Organization Strategy}{47}{section.6.9}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.9.1}Coverage Type Grouping (Per Test File)}{47}{subsection.6.9.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{1. Statement Coverage Tests [S\#]}{47}{section*.56}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsubsection}{2. Branch Coverage Tests [B\#]}{47}{section*.57}\protected@file@percent }
+\gdef \LT@xxxv {\LT@entry 
+    {1}{83.93187pt}\LT@entry 
+    {1}{168.89014pt}}
+\@writefile{toc}{\contentsline {subsubsection}{3. Path Coverage Tests [P\#]}{48}{section*.58}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.9.2}Test File Organization}{48}{subsection.6.9.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.10}Test Execution Checklist}{48}{section.6.10}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.11}Coverage Highlights}{49}{section.6.11}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.11.1}Comprehensive Feature Coverage}{49}{subsection.6.11.1}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.11.2}Error Path Testing}{49}{subsection.6.11.2}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {6.11.3}Business Logic Validation}{49}{subsection.6.11.3}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6.12}Conclusion}{50}{section.6.12}\protected@file@percent }
+\gdef \@abspage@last{51}

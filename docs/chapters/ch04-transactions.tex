@@ -1,0 +1,327 @@
+\chapter{Transaction Processing}
+
+\section{Feature Overview}
+Core transaction operations (deposit, withdraw, transfer) with validation, authorization, account status checks, balance management, and transaction history tracking.
+
+\section{Function: \texttt{getAllTransactions(page = 1, limit = 10)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getAllTransactions(page, limit) → { data, total, page, limit, pages }
+Parameters: page (pagination), limit (items per page)
+\end{verbatim}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{6cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Status} \\
+\hline
+1 & DB available & Query $\rightarrow$ Get transactions $\rightarrow$ Count total $\rightarrow$ Return & 200 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 5 statements
+    \item \textbf{Branch Coverage}: 0 conditional branches
+    \item \textbf{Path Coverage}: 1 path
+\end{itemize}
+
+\section{Function: \texttt{getAccountTransactions(accountId: string, page = 1, limit = 10)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getAccountTransactions(accountId, page, limit) → { data, total, page, limit, pages }
+Parameters: accountId, page, limit
+\end{verbatim}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{6cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Account has transactions & Query $\rightarrow$ Get transactions (from OR to) $\rightarrow$ Return & 200 \\
+\hline
+2 & Account has no transactions & Query $\rightarrow$ Get empty list $\rightarrow$ Return & 200 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 5 statements
+    \item \textbf{Branch Coverage}: 0 conditional branches
+    \item \textbf{Path Coverage}: 2 paths
+\end{itemize}
+
+\section{Function: \texttt{deposit(userId: string, data: DepositInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+deposit(userId, data) → transaction
+Parameters: userId, data (accountId, amount, description?)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Account Existence}
+\begin{itemize}
+    \item \textbf{True}: Account found $\rightarrow$ continue
+    \item \textbf{False}: Account not found $\rightarrow$ throw Error(\textit{``Account not found''})
+\end{itemize}
+
+\subsubsection{Decision 2: Account Ownership/Role Check}
+\begin{itemize}
+    \item \textbf{Condition}: Customer depositing to someone else's account?
+    \item \textbf{True}: Unauthorized $\rightarrow$ throw Error
+    \item \textbf{False}: Owner or admin/teller $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 3: Account Active Check}
+\begin{itemize}
+    \item \textbf{True}: Inactive $\rightarrow$ throw Error(\textit{``Account is not active''})
+    \item \textbf{False}: Active $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 4: Amount Validation}
+\begin{itemize}
+    \item \textbf{Condition}: amount $\geq 100$ (via Zod schema)
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{5.5cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Account found $\rightarrow$ Authorized $\rightarrow$ Active $\rightarrow$ Amount valid & Deposit successful & 200 \\
+\hline
+2 & Account not found & Account not found & 404 \\
+\hline
+3 & Account found $\rightarrow$ Unauthorized & Unauthorized deposit & 403 \\
+\hline
+4 & Account found $\rightarrow$ Inactive & Account inactive & 400 \\
+\hline
+5 & Account found $\rightarrow$ Amount $< 100$ & Invalid amount & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 8 statements
+    \item \textbf{Branch Coverage}: 4 branches with 16 combinations (1 success + 4 error)
+    \item \textbf{Path Coverage}: 5 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{withdraw(userId: string, data: WithdrawInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+withdraw(userId, data) → transaction
+Parameters: userId, data (accountId, amount, description?)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: Account Existence}
+\begin{itemize}
+    \item \textbf{True}: Account found $\rightarrow$ continue
+    \item \textbf{False}: Account not found $\rightarrow$ throw Error
+\end{itemize}
+
+\subsubsection{Decision 2: Account Ownership}
+\begin{itemize}
+    \item \textbf{True}: Not owned by user $\rightarrow$ throw Error(\textit{``You can only withdraw from your own account''})
+    \item \textbf{False}: Owned by user $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 3: Account Active Check}
+\begin{itemize}
+    \item \textbf{True}: Inactive $\rightarrow$ throw Error(\textit{``Account is not active''})
+    \item \textbf{False}: Active $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 4: Sufficient Balance Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{account.balance < amount}
+    \item \textbf{True}: Insufficient $\rightarrow$ throw Error(\textit{``Insufficient balance''})
+    \item \textbf{False}: Sufficient $\rightarrow$ continue
+\end{itemize}
+
+\subsubsection{Decision 5: Amount Validation}
+\begin{itemize}
+    \item \textbf{Condition}: amount $\geq 100$ (via Zod schema)
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{5.5cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Account found $\rightarrow$ Owned $\rightarrow$ Active $\rightarrow$ Balance sufficient $\rightarrow$ Amount valid & Withdrawal successful & 200 \\
+\hline
+2 & Account not found & Account not found & 404 \\
+\hline
+3 & Account found $\rightarrow$ Not owned & Unauthorized & 403 \\
+\hline
+4 & Account found $\rightarrow$ Inactive & Account inactive & 400 \\
+\hline
+5 & Account found $\rightarrow$ Insufficient balance & Insufficient balance & 400 \\
+\hline
+6 & Account found $\rightarrow$ Amount $< 100$ & Invalid amount & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 8 statements
+    \item \textbf{Branch Coverage}: 5 branches with 32 combinations (1 success + 5 error)
+    \item \textbf{Path Coverage}: 6 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{transfer(userId: string, data: TransferInput)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+transfer(userId, data) → transaction
+Parameters: userId, data (fromAccountId, toAccountId, amount, description?)
+\end{verbatim}
+
+\subsection{Decision Points \& Branches}
+
+\subsubsection{Decision 1: From Account Existence}
+\begin{itemize}
+    \item \textbf{False}: throw Error(\textit{``From account not found''})
+\end{itemize}
+
+\subsubsection{Decision 2: To Account Existence}
+\begin{itemize}
+    \item \textbf{False}: throw Error(\textit{``To account not found''})
+\end{itemize}
+
+\subsubsection{Decision 3: From Account Ownership}
+\begin{itemize}
+    \item \textbf{True}: Not owned $\rightarrow$ throw Error(\textit{``You can only transfer from your own account''})
+\end{itemize}
+
+\subsubsection{Decision 4: Both Accounts Active Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{!fromAccount.isActive || !toAccount.isActive}
+    \item \textbf{True}: Inactive $\rightarrow$ throw Error
+\end{itemize}
+
+\subsubsection{Decision 5: Sufficient Balance}
+\begin{itemize}
+    \item \textbf{True}: Insufficient $\rightarrow$ throw Error(\textit{``Insufficient balance''})
+\end{itemize}
+
+\subsubsection{Decision 6: Self-Transfer Check}
+\begin{itemize}
+    \item \textbf{Condition}: \texttt{fromAccountId === toAccountId}
+    \item \textbf{True}: Same account $\rightarrow$ throw Error(\textit{``Cannot transfer to the same account''})
+\end{itemize}
+
+\subsubsection{Decision 7: Amount Validation}
+\begin{itemize}
+    \item \textbf{Condition}: amount $\geq 100$ (via Zod schema)
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3.5cm}|L{4.5cm}|L{1.5cm}|}
+\hline
+\textbf{Path} & \textbf{Condition Chain} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Both found $\rightarrow$ Owned $\rightarrow$ Both active $\rightarrow$ Balance sufficient $\rightarrow$ Not self-transfer $\rightarrow$ Amount valid & Transfer successful & 200 \\
+\hline
+2 & From not found & Account not found & 404 \\
+\hline
+3 & To not found & Account not found & 404 \\
+\hline
+4 & Both found $\rightarrow$ From not owned & Unauthorized & 403 \\
+\hline
+5 & Both found $\rightarrow$ One/both inactive & Account inactive & 400 \\
+\hline
+6 & Both found $\rightarrow$ Insufficient balance & Insufficient balance & 400 \\
+\hline
+7 & Both found $\rightarrow$ Self-transfer & Cannot self-transfer & 400 \\
+\hline
+8 & Both found $\rightarrow$ Amount $< 100$ & Invalid amount & 400 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 11 statements
+    \item \textbf{Branch Coverage}: 7 branches with 128 combinations (1 success + 7 error)
+    \item \textbf{Path Coverage}: 8 distinct paths
+\end{itemize}
+
+\section{Function: \texttt{getTransactionByReference(reference: string)}}
+
+\subsection{Entry Point}
+\begin{verbatim}
+getTransactionByReference(reference) → transaction
+Parameters: reference (unique identifier)
+\end{verbatim}
+
+\subsection{Decision Points}
+
+\subsubsection{Decision 1: Transaction Lookup}
+\begin{itemize}
+    \item \textbf{True}: Transaction found $\rightarrow$ return with accounts and users
+    \item \textbf{False}: Transaction not found $\rightarrow$ throw Error(\textit{``Transaction not found''})
+\end{itemize}
+
+\subsection{All Execution Paths}
+
+\begin{longtable}{|L{0.8cm}|L{3cm}|L{5.5cm}|L{2.5cm}|L{1.2cm}|}
+\hline
+\textbf{Path} & \textbf{Condition} & \textbf{Execution} & \textbf{Result} & \textbf{Status} \\
+\hline
+1 & Found & GetByReference $\rightarrow$ Find $\rightarrow$ Return & Retrieved & 200 \\
+\hline
+2 & Not found & GetByReference $\rightarrow$ Find (not found) $\rightarrow$ Throw & Not found & 404 \\
+\hline
+\end{longtable}
+
+\subsection{Coverage Summary}
+\begin{itemize}
+    \item \textbf{Statement Coverage}: 2 statements
+    \item \textbf{Branch Coverage}: 1 branch with 2 paths
+    \item \textbf{Path Coverage}: 2 distinct paths
+\end{itemize}
+
+\section{Summary: Transaction Processing Feature}
+
+\begin{longtable}{|l|c|c|c|}
+\hline
+\textbf{Function} & \textbf{Statements} & \textbf{Branches} & \textbf{Paths} \\
+\hline
+getAllTransactions() & 5 & 0 & 1 \\
+\hline
+getAccountTransactions() & 5 & 0 & 2 \\
+\hline
+deposit() & 8 & 4 & 5 \\
+\hline
+withdraw() & 8 & 5 & 6 \\
+\hline
+transfer() & 11 & 7 & 8 \\
+\hline
+getTransactionByReference() & 2 & 1 & 2 \\
+\hline
+\textbf{TOTAL} & \textbf{39} & \textbf{17} & \textbf{24} \\
+\hline
+\end{longtable}
+
+\subsection{Key Test Coverage Requirements}
+\begin{itemize}
+    \item Happy path for each transaction type (deposit, withdraw, transfer)
+    \item All error conditions: account not found, unauthorized access, insufficient balance, inactive accounts, self-transfer prevention, minimum amount validation
+    \item Authorization logic (customers vs admin/teller for deposits)
+    \item Balance updates (before/after snapshots)
+    \item Transaction reference retrieval
+    \item Pagination for transaction lists
+\end{itemize}
