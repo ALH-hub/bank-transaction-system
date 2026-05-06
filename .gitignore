@@ -31,6 +31,18 @@ yarn-error.log*
 # Testing
 .nyc_output/
 
+docs/chapters
+docs/report.out
+docs/report.log
+docs/report.aux
+docs/report.toc
+docs/report.lof
+docs/report.lot
+docs/report.fls
+docs/report.fdb_latexmk
+docs/report-build1.log
+
+
 # Prisma
 prisma/dev.db
 prisma/dev.db-journal
