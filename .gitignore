@@ -31,6 +31,7 @@ yarn-error.log*
 # Testing
 .nyc_output/
 
+
 docs/chapters
 docs/report.out
 docs/report.log
